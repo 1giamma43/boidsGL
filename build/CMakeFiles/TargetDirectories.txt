@@ -1,0 +1,3 @@
+/home/gianmarco_salerno884/programmazione/progetto_b/build/CMakeFiles/progetto_b.dir
+/home/gianmarco_salerno884/programmazione/progetto_b/build/CMakeFiles/edit_cache.dir
+/home/gianmarco_salerno884/programmazione/progetto_b/build/CMakeFiles/rebuild_cache.dir
