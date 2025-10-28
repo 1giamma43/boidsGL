@@ -7,11 +7,10 @@
 
 
 int main() {
-
-  sf::RenderWindow window(sf::VideoMode({800, 600}),
-                          "simulation of a flock of boids");
+ 
+  renderWindow();//capire erroe
   window.setFramerateLimit(40);
-  sf::RenderWindow optionsWindow(sf::VideoMode({200,600}),"options window");
+ 
   
 
   sf::Font font;
@@ -31,27 +30,19 @@ int main() {
   nBoid.setOutlineColor(sf::Color(0, 0, 170));
   nBoid.setOutlineThickness(1.f);
 
-  sf::ConvexShape convex(
-      4); // biogna avere un qualcosa per selezionare quanti convex creare+
-          // vorrei poterlo scegliere tramite un aggeggio nel window
-  convex.setPoint(0, {0.f, 0.f});
-  convex.setPoint(1, {60.f, 20.f});
-  convex.setPoint(2, {40.f, 30.f});
-  convex.setPoint(3, {30.f, 50.f});
-  convex.setFillColor(sf::Color(204, 77, 5));
-  convex.setPosition(200, 200);
-  // convex.setOrigin({500,500});
+  
 std::vector<sf::ConvexShape> VecBoid;
 
  //METTO I PARAMETRI CHE SI INSERISCONO DAL TERMINALE PERò VORREI CAmbiare e farli inserire dal window 
 double d,s,a,c;
 std::cin>>d,s,a,c;
 
-
-
+std::chrono::steady_clock t;
+std::chrono::time_point t_0=t.now();
   while (window.isOpen()) {
     sf::Event event;
-
+    
+    
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         window.close();
@@ -89,10 +80,10 @@ std::cin>>d,s,a,c;
      VecBoid.push_back(convex);
     }
     
-    convex.move(-10.f, -10.f); // qua bisogna mettere la veloxboid
+    
     // convex.rotate(10.f);//fare una funziona che mi cambi l'angolo seguendo il
     // centro di massa
-    convex.getPosition();
+    //convex.getPosition();
     //array2 i= veloxBoid(d,s,a,c,convex.getPosition(),);
 
     boids primo({convex.getPosition().x,convex.getPosition().y},{});//controlla che funzioni veramente
@@ -114,10 +105,7 @@ std::cin>>d,s,a,c;
 
     window.clear(sf::Color(0,226, 238));
     optionsWindow.clear(sf::Color(255,255,255));
-    window.draw(convex);
-    window.draw(usersBars);
-    window.draw(nBoid);
-    window.draw(bohpar);
+   
     optionsWindow.display();
     window.display();
   }

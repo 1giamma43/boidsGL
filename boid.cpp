@@ -3,6 +3,7 @@
 #include <cmath>
 #include <functional>
 #include <random>
+#include <chrono>
 
 boids::~boids() { delete[] &boid_1_; }
 
@@ -16,7 +17,11 @@ void boids::moveBoid() {
   // del boid il secondo precedente, se non impiega troppa memoria posso farlo
   // anche mezzo secondo prima o anche meno, usare la libreria chrono non so come...
   boid_1_.move({q + veloxBoid(k, d_s, d, s, a, c, ), q});
+  
 }
 
-const sf::Vector2f boids::getpositionb() { return boid_1_.getPosition(); }
+ sf::Vector2f boids::getpositionb() {
+  sf::Vector2f position=boid_1_.getPosition();
+  return position; }
+  
 void boids::getdistance() {}

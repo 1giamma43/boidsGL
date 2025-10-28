@@ -8,10 +8,10 @@
 #include <SFML/Graphics/Texture.hpp>
 
 class boids {
-  sf::ConvexShape boid_1;
+  sf::ConvexShape boid_1_;
 
 public:
-  boids(sf::ConvexShape convex) : boid_1{convex} { // crea un oggetto boids
+  boids(sf::ConvexShape convex) : boid_1_{convex} { // crea un oggetto boids
     sf::ConvexShape convex(
         4); // biogna avere un qualcosa per selezionare quanti convex creare+
             // vorrei poterlo scegliere tramite un aggeggio nel window
@@ -26,7 +26,7 @@ public:
   
   void eraseBoid();
   void moveBoid();
-  void getpositionb();
+  sf::Vector2f getpositionb();
   void getdistance(); // serve?
 };
 #endif

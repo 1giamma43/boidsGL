@@ -15,116 +15,115 @@
 //  io credo che i vector qui potrebbero essere cambiati in array perchè tanto
 //  all'interno della funzione non cambiano size però non so se ha senso e se si
 //  può fare
-array2 veloxBoid(float k, float d_s, float d, float s, float a, float c,
-                 array2 &vBoid_1, std::vector<array2> &posBoids,
-                 std::vector<array2> &vBoids) {
+sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
+                       std::vector<sf::Vector2f> &posBoids,
+                       std::vector<sf::Vector2f> &vBoids) {
 
   std::vector<float> vecModDistanze = {};
   for (long unsigned int i = 0; i < posBoids.size(); i++) {
     if (i = k) {
       continue;
     }
-    vecModDistanze.push_back(sqrt(powf(vecDistance(k, posBoids)[i][0], 2) +
-                                  powf(vecDistance(k, posBoids)[i][1], 2)));
+    vecModDistanze.push_back(sqrt(powf(vecDistance(k, posBoids)[i].x, 2) +
+                                  powf(vecDistance(k, posBoids)[i].y, 2)));
   }
-  std::vector<array2> nearBoids = {{}};
-  std::vector<array2> nearVel = {{}};
-  for (auto i : vecModDistanze) {
-    if (i = k) // non sono sicuro sia giustissimo
-    {
-      continue;
-    }
+  std::vector<sf::Vector2f> nearBoids = {{}};
+  std::vector<sf::Vector2f> nearVel = {{}};
+
+  for (long unsigned int i = 0; i < posBoids.size(); i++) {
+
     if (vecModDistanze[i] < d) {
       nearBoids.push_back(posBoids[i]);
       nearVel.push_back(vBoids[i]);
     }
   }
-  array2 velox = {vBoid_1[0] + separazione(d_s, s, nearBoids, posBoids[k])[0] +
-                      allineamento(a, nearVel, vBoids[k])[0] +
-                      coesione(c, nearBoids, posBoids[k])[0],
-                  vBoid_1[1] + separazione(d_s, s, nearBoids, posBoids[k])[1] +
-                      allineamento(a, nearVel, vBoids[k])[1] +
-                      coesione(c, nearBoids, posBoids[k])[1]};
-
-  /*             if (std::find_if(it, vecModDistanze.end(),
-    std::less<float>{}(d, *it)) != vecModDistanze.end()) {}*/
+  sf::Vector2f velox = {
+      vBoids[k].x + separazione(d_s, s, nearBoids, posBoids[k]).x +
+          allineamento(a, nearVel, vBoids[k]).x +
+          coesione(c, nearBoids, posBoids[k]).x,
+      vBoids[k].y + separazione(d_s, s, nearBoids, posBoids[k]).y +
+          allineamento(a, nearVel, vBoids[k]).y +
+          coesione(c, nearBoids, posBoids[k]).y};
   return velox;
 }
 
-array2 separazione(float d_s, float s, std::vector<array2> &nearBoids,
-                   array2 &posBoid_1) {
+sf::Vector2f separazione(float d_s, float s,
+                         std::vector<sf::Vector2f> &nearBoids,
+                         sf::Vector2f &posBoid_1) {
   if (s < 0) {
     throw std::runtime_error(
         "Errore: il parametro s dev'essere maggiore o uguale di 0");
   }
   float vecdist = 0;
-  array2 vSeparation = {0, 0};
-  for (long unsigned int j = 0; j < nearBoids.size(); j++) {
+  sf::Vector2f vSeparation = {0, 0};
 
-    vecdist = sqrt(powf(vecDistance(nearBoids, posBoid_1)[j][0], 2) +
-                   powf(vecDistance(nearBoids, posBoid_1)[j][1], 2));
+  for (auto j : nearBoids) {
+    int i;
+    vecdist = sqrt(powf(vecDistance(nearBoids, posBoid_1)[i].x, 2) +
+                   powf(vecDistance(nearBoids, posBoid_1)[i].y, 2));
     if (fabs(vecdist) > d_s) {
       continue;
     }
-    vSeparation[0] += nearBoids[j][0];
-    vSeparation[1] += nearBoids[j][1];
+    vSeparation.x += j.x;
+    vSeparation.y += j.y;
+    i++;
   }
-  vSeparation[0] = -s * vSeparation[0];
-  vSeparation[1] = -s * vSeparation[1];
+  vSeparation.x = -s * vSeparation.x;
+  vSeparation.y = -s * vSeparation.y;
 
   return vSeparation;
 }
 
-array2 allineamento(float a, std::vector<array2> &nearVel, array2 &vBoid_1) {
+sf::Vector2f allineamento(float a, std::vector<sf::Vector2f> &nearVel,
+                          sf::Vector2f &vBoid_1) {
   if (a < 0 || a > 1) {
     throw std::runtime_error("Errore: il parametro a dev'essere maggiore o "
                              "uguale di 0 e minore di 1");
   }
-  array2 meanVel = {0, 0};
-  for (long unsigned int i = 0; i < nearVel.size(); i++) {
+  sf::Vector2f meanVel = {0, 0};
+  for (auto j : nearVel) {
 
-    meanVel[0] += nearVel[i][0];
-    meanVel[1] += nearVel[i][1];
+    meanVel.x += j.y;
+    meanVel.y += j.y;
   }
-  meanVel = {meanVel[0] / nearVel.size(), meanVel[1] / nearVel.size()};
-  array2 vAllineamento = {0, 0};
+  meanVel = {meanVel.x / nearVel.size(), meanVel.y / nearVel.size()};
+  sf::Vector2f vAllineamento = {0, 0};
 
-  vAllineamento[0] = a * (meanVel[0] - vBoid_1[0]) / (nearVel.size());
-  vAllineamento[1] = a * (meanVel[1] - vBoid_1[1]) / (nearVel.size());
+  vAllineamento.x = a * (meanVel.x - vBoid_1.x) / (nearVel.size());
+  vAllineamento.y = a * (meanVel.y - vBoid_1.y) / (nearVel.size());
   return vAllineamento;
 }
 
-array2 coesione(float c, std::vector<array2> &nearBoids, array2 &posBoid_1) {
-  array2 CM;
-  for (long unsigned int j = 0; j < nearBoids.size(); j++) {
+sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
+                      sf::Vector2f &posBoid_1) {
+  sf::Vector2f CM;
+  for (auto j : nearBoids) {
 
-    CM[0] += nearBoids[j][0];
-    CM[1] += nearBoids[j][1];
+    CM.x += j.x;
+    CM.y += j.y;
   }
-  CM = {CM[0] / nearBoids.size(), CM[1] / nearBoids.size()};
-  array2 vCoesione = {c * (CM[0] - posBoid_1[0]), c * (CM[1] - posBoid_1[1])};
+  CM = {CM.x / nearBoids.size(), CM.y / nearBoids.size()};
+  sf::Vector2f vCoesione = {c * (CM.x - posBoid_1.x), c * (CM.y - posBoid_1.y)};
   return vCoesione;
 }
 
 ////////////////////////////////////////////////////////////////////////
-std::vector<array2> vecDistance(int k, std::vector<array2> &posBoids) {
-  for (long unsigned int j = 0; j < posBoids.size(); j++) {
-    if (k == j) {
-      continue;
-    }
+std::vector<sf::Vector2f> vecDistance(int k,
+                                      std::vector<sf::Vector2f> &posBoids) {
+  for (auto j : posBoids) {
 
-    posBoids[j][0] = posBoids[k][0] - posBoids[j][0];
-    posBoids[j][1] = posBoids[k][1] - posBoids[j][1];
+    j.x = posBoids[k].x - j.x;
+    j.y = posBoids[k].y - j.y;
   }
   return posBoids;
 }
 
-std::vector<array2> vecDistance(std::vector<array2> &nearBoids,
-                                array2 &posBoid_1) {
-  for (long unsigned int j = 0; j < nearBoids.size(); j++) {
+std::vector<sf::Vector2f> vecDistance(std::vector<sf::Vector2f> &nearBoids,
+                                      sf::Vector2f &posBoid_1) {
+  for (auto j : nearBoids) {
 
-    nearBoids[j][0] = posBoid_1[0] - nearBoids[j][0];
-    nearBoids[j][1] = posBoid_1[1] - nearBoids[j][1];
+    j.x = posBoid_1.x - j.x;
+    j.y = posBoid_1.y - j.y;
   }
   return nearBoids;
 }
