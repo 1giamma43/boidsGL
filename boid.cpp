@@ -2,32 +2,21 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <random>
 
+boids::~boids() { delete[] &boid_1_; }
 
-array2 veloxboid(double d, double s, double a, double c, array2 posBoid,
-                 array2 vBoid, std::vector<array2> posAltri,
-                 std::vector<array2> vAltri) {
-  std::vector<array2> vecDistanze;
-  std::vector<double> vModDistanze;
-  for (size_t i = 0; i < posAltri.size(); i++) {
-    vecDistanze[i][0] =
-        posBoid[0] -
-        posAltri[i][0]; // forse non andrà perchè il vector è stato creato vuoto
-                        // e per riempirlo si usa push_back
-    vecDistanze[i][1] = posBoid[1] - posAltri[i][1];
-    vModDistanze.push_back(
-        sqrt(powf(vecDistanze[i][0], 2) + powf(vecDistanze[i][1], 2)));
-  }
-  auto it =vModDistanze.begin();
- 
-  if (std::find_if(it, vModDistanze.end(), std::less<double>{}(d,*it) ) ==
-      vModDistanze.end()) {
-    array2 velox;
-    velox[0] = vBoid[0] + separazione(s, posBoid, posAltri)[0] +
-               allineamento(a, vBoid, vAltri)[0] +
-               coesione(c, posBoid, posAltri)[0];
-    velox[1] = vBoid[1] + separazione(s, posBoid, posAltri)[1] +
-               allineamento(a, vBoid, vAltri)[1] +
-               coesione(c, posBoid, posAltri)[1];
-  };
+void boids::eraseBoid() { boids::~boids(); }
+
+void boids::moveBoid() {
+  // dà al boid una velocità casuale entro il range di -5.f e 5.f sulla x e
+  // sulla y
+  float q = static_cast<float>(rand() % 10 - 5.f);
+  // per calcolare la velocità del boid ogni secondo ho bisogno della velocità
+  // del boid il secondo precedente, se non impiega troppa memoria posso farlo
+  // anche mezzo secondo prima o anche meno, usare la libreria chrono non so come...
+  boid_1_.move({q + veloxBoid(k, d_s, d, s, a, c, ), q});
 }
+
+const sf::Vector2f boids::getpositionb() { return boid_1_.getPosition(); }
+void boids::getdistance() {}
