@@ -1,113 +1,201 @@
+// #include "flock.hpp"
+#include <chrono>
 #include <iostream>
-#include "boid.cpp"
-
-#include <string>
 #include <numeric>
+#include <string>
 #include <vector>
 
+#include "SFML/Graphics.hpp"
+#include "SFML/Network.hpp"
+#include "SFML/System.hpp"
+#include "SFML/Window.hpp"
 
 int main() {
- 
-  renderWindow();//capire erroe
-  window.setFramerateLimit(40);
- 
-  
 
+  sf::RenderWindow window(sf::VideoMode({1200, 600}),
+                          "simulation of a flock of boids");
+  window.setPosition({300, 200});
+  window.setFramerateLimit(40);
+
+  //////////////////////////////////////////////////////
   sf::Font font;
   font.loadFromFile("roboto/Roboto-Light.ttf");
- ///////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
 
-  sf::RectangleShape usersBars({200.f, 70.f});
-  usersBars.setFillColor(sf::Color(100, 20, 180));
+  sf::RectangleShape sfondo({400.f, 600.f});
+  sfondo.setFillColor(sf::Color(0, 0, 0));
+  sfondo.setPosition(800.f, 0.f);
 
-  sf::RectangleShape bohpar({8.f, 24.f});
-  bohpar.setPosition(13.f, 10.f);
-  bohpar.setFillColor(sf::Color(50, 30, 20));
+  sf::RectangleShape modNBoids({300.f, 40.f});
+  modNBoids.setFillColor(sf::Color(250, 200, 150));
+  modNBoids.setPosition(850.f, 0.f);
+  sf::Text usersText;
+  usersText.setFont(font);
+  usersText.setString("Modify number of boids--->");
+  usersText.setPosition(860.f, 10.f);
+  usersText.setCharacterSize(17);
+  usersText.setFillColor(sf::Color::Black);
+  sf::Text usersNumText;
+  usersNumText.setFont(font);
+  int numBoids = 0;
+  usersNumText.setPosition(1080.f, 10.f);
+  usersNumText.setCharacterSize(17);
+  usersNumText.setFillColor(sf::Color::Black);
 
-  sf::RectangleShape nBoid({20.f, 12.f});
-  nBoid.setPosition(13.f, 40.f);
-  nBoid.setFillColor(sf::Color(5, 5, 5));
-  nBoid.setOutlineColor(sf::Color(0, 0, 170));
-  nBoid.setOutlineThickness(1.f);
+  sf::RectangleShape dParam({300.f, 40.f});
+  dParam.setFillColor(sf::Color(250, 200, 150));
+  dParam.setPosition(850.f, 50.f);
+  sf::Text usersText2;
+  usersText2.setFont(font);
+  usersText2.setString("Modify parameter d------>");
+  usersText2.setPosition(860.f, 60.f);
+  usersText2.setCharacterSize(17);
+  usersText2.setFillColor(sf::Color::Black);
+  sf::Text usersNumText2;
+  usersNumText2.setFont(font);
+  float dPar = 0.f;
+  usersNumText2.setPosition(1080.f, 60.f);
+  usersNumText2.setCharacterSize(17);
+  usersNumText2.setFillColor(sf::Color::Black);
 
+  sf::RectangleShape d_sParam({300.f, 40.f});
+  d_sParam.setFillColor(sf::Color(250, 200, 150));
+  d_sParam.setPosition(850.f, 100.f);
+  sf::Text usersText3;
+  usersText3.setFont(font);
+  usersText3.setString("Modify parameter d_s---->");
+  usersText3.setPosition(860.f, 110.f);
+  usersText3.setCharacterSize(17);
+  usersText3.setFillColor(sf::Color::Black);
+  sf::Text usersNumText3;
+  usersNumText3.setFont(font);
+  float d_sPar = 0.f;
+  usersNumText3.setPosition(1080.f, 110.f);
+  usersNumText3.setCharacterSize(17);
+  usersNumText3.setFillColor(sf::Color::Black);
+
+   sf::RectangleShape sParam({300.f, 40.f});
+  sParam.setFillColor(sf::Color(250, 200, 150));
+  sParam.setPosition(850.f, 150.f);
+  sf::Text usersText4;
+  usersText4.setFont(font);
+  usersText4.setString("Modify parameter s------>");
+  usersText4.setPosition(860.f, 160.f);
+  usersText4.setCharacterSize(17);
+  usersText4.setFillColor(sf::Color::Black);
+  sf::Text usersNumText4;
+  usersNumText4.setFont(font);
+  float sPar = 0.f;
+  usersNumText4.setPosition(1080.f, 160.f);
+  usersNumText4.setCharacterSize(17);
+  usersNumText4.setFillColor(sf::Color::Black);
+
+ sf::RectangleShape aParam({300.f, 40.f});
+  aParam.setFillColor(sf::Color(250, 200, 150));
+  aParam.setPosition(850.f, 200.f);
+  sf::Text usersText5;
+  usersText5.setFont(font);
+  usersText5.setString("Modify parameter a------>");
+  usersText5.setPosition(860.f, 210.f);
+  usersText5.setCharacterSize(17);
+  usersText5.setFillColor(sf::Color::Black);
+  sf::Text usersNumText5;
+  usersNumText5.setFont(font);
+  float aPar = 0.f;
+  usersNumText5.setPosition(1080.f, 210.f);
+  usersNumText5.setCharacterSize(17);
+  usersNumText5.setFillColor(sf::Color::Black);
+
+  sf::RectangleShape cParam({300.f, 40.f});
+  cParam.setFillColor(sf::Color(250, 200, 150));
+  cParam.setPosition(850.f, 250.f);
+  sf::Text usersText6;
+  usersText6.setFont(font);
+  usersText6.setString("Modify parameter c------>");
+  usersText6.setPosition(860.f, 260.f);
+  usersText6.setCharacterSize(17);
+  usersText6.setFillColor(sf::Color::Black);
+  sf::Text usersNumText6;
+  usersNumText6.setFont(font);
+  float cPar = 0.f;
+  usersNumText6.setPosition(1080.f, 260.f);
+  usersNumText6.setCharacterSize(17);
+  usersNumText6.setFillColor(sf::Color::Black);
   
-std::vector<sf::ConvexShape> VecBoid;
-
- //METTO I PARAMETRI CHE SI INSERISCONO DAL TERMINALE PERò VORREI CAmbiare e farli inserire dal window 
-double d,s,a,c;
-std::cin>>d,s,a,c;
-
-std::chrono::steady_clock t;
-std::chrono::time_point t_0=t.now();
   while (window.isOpen()) {
     sf::Event event;
-    
-    
+    int i = 0;
+
     while (window.pollEvent(event)) {
+
       if (event.type == sf::Event::Closed) {
         window.close();
       }
-    }
-
-    if (event.type == event.MouseButtonPressed) { // non funzionaaa
-      if (sf::Mouse::getPosition(window).x == bohpar.getPosition().x &&
-          sf::Mouse::getPosition(window).y == bohpar.getPosition().y) {
-
-        bohpar.move(sf::Mouse::getPosition(window).x, 10.f);
+      //serve cambiare il getposition con la posizione rispetto alla finestra non allo schermo intero
+      if (sf::Mouse::getPosition().x >= 850 &&
+          sf::Mouse::getPosition().x <= 1150 &&
+          sf::Mouse::getPosition().y >= 0 &&
+          sf::Mouse::getPosition().y <= 40 &&
+          event.type == sf::Mouse::isButtonPressed(sf::Mouse::Left) &&// sserve altro
+          numBoids >= 0 && numBoids <= 30) {                        
+        if (event.key.code == sf::Keyboard::Up) {
+        numBoids += 1;
+        usersNumText.setString(std::to_string(numBoids));
       }
-    }
-
-    if (event.type == event.MouseButtonPressed) {
-      if (sf::Mouse::getPosition(window).x > 13.f &&
-          sf::Mouse::getPosition(window).x < 33.f &&
-          sf::Mouse::getPosition(window).y < 52.f &&
-          sf::Mouse::getPosition(window).y > 40.f) {
-        // deve scrivere il numero all'interno del rettangolo e poi vabbè
-        // chiaramente modificare il numero di boids nello schermo
-            
-
-        sf::Text numEnt{"rco",font,20U};
-        numEnt.setPosition({300.f, 500.f});
-        window.draw(numEnt);
+      
+      if (event.key.code == sf::Keyboard::Down && numBoids > 0) {
+        numBoids -= 1;
+        usersNumText.setString(std::to_string(numBoids));
       }
-    }
+    }}
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Add) )
-    {
-      sf::RectangleShape rect({50.f,60.f});
-      rect.setPosition({400.f,400.f});
-      window.draw(rect);
-     VecBoid.push_back(convex);
-    }
-    
-    
-    // convex.rotate(10.f);//fare una funziona che mi cambi l'angolo seguendo il
-    // centro di massa
-    //convex.getPosition();
-    //array2 i= veloxBoid(d,s,a,c,convex.getPosition(),);
+    /* flock stormo(numBoids);
 
-    boids primo({convex.getPosition().x,convex.getPosition().y},{});//controlla che funzioni veramente
+     stormo.moveFlock(i , d_s, d, s, a,
+                      c, flock::getvelocityBoids()); // bene ora bisogna fare in
+     modo che ogni mezzo
+                            // secondo calcoli la velocità
 
 
-    // collisione con lati del window
-    if (convex.getPosition().x > 800.f) {
-      convex.setPosition(0.f, convex.getPosition().y);
-    }
-    if (convex.getPosition().y > 600.f) {
-      convex.setPosition(convex.getPosition().x, 0.f);
-    }
-    if (convex.getPosition().y < 0.f) {
-      convex.setPosition(convex.getPosition().x, 600.f);
-    }
-    if (convex.getPosition().x < 0.f) {
-      convex.setPosition(800.f, convex.getPosition().y);
-    }
 
-    window.clear(sf::Color(0,226, 238));
-    optionsWindow.clear(sf::Color(255,255,255));
-   
-    optionsWindow.display();
+     // collisione con lati del window
+     if (convex.getPosition().x > 800.f) {
+       convex.setPosition(0.f, convex.getPosition().y);
+     }
+     if (convex.getPosition().y > 600.f) {
+       convex.setPosition(convex.getPosition().x, 0.f);
+     }
+     if (convex.getPosition().y < 0.f) {
+       convex.setPosition(convex.getPosition().x, 600.f);
+     }
+     if (convex.getPosition().x < 0.f) {
+       convex.setPosition(800.f, convex.getPosition().y);
+     }
+ */
+
+    i++;
+    window.clear(sf::Color(0, 226, 238));
+    window.draw(sfondo);
+    window.draw(modNBoids);
+    window.draw(usersText);
+    window.draw(usersNumText);
+    window.draw(dParam);
+    window.draw(usersText2);
+    window.draw(usersNumText2);
+    window.draw(d_sParam);
+    window.draw(usersText3);
+    window.draw(usersNumText3);
+     window.draw(sParam);
+    window.draw(usersText4);
+    window.draw(usersNumText4);
+     window.draw(aParam);
+    window.draw(usersText5);
+    window.draw(usersNumText5);
+      window.draw(cParam);
+    window.draw(usersText6);
+    window.draw(usersNumText6);
     window.display();
+    
   }
   return 0;
 }

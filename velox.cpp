@@ -11,14 +11,11 @@
 #include <iostream>
 #include <vector>
 
-//  riguardare e cercare di capire come cambiare i vari for in algoritmi
-//  io credo che i vector qui potrebbero essere cambiati in array perchè tanto
-//  all'interno della funzione non cambiano size però non so se ha senso e se si
-//  può fare
+
 sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &posBoids,
                        std::vector<sf::Vector2f> &vBoids) {
-
+//crea un vettore con le distanze tra i boids j e il boid k
   std::vector<float> vecModDistanze = {};
   for (long unsigned int i = 0; i < posBoids.size(); i++) {
     if (i = k) {
@@ -27,22 +24,24 @@ sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
     vecModDistanze.push_back(sqrt(powf(vecDistance(k, posBoids)[i].x, 2) +
                                   powf(vecDistance(k, posBoids)[i].y, 2)));
   }
+
+// crea 1 vettore con solo le posizioni dei boids che stanno entro la distanza d
   std::vector<sf::Vector2f> nearBoids = {{}};
-  std::vector<sf::Vector2f> nearVel = {{}};
 
   for (long unsigned int i = 0; i < posBoids.size(); i++) {
 
     if (vecModDistanze[i] < d) {
       nearBoids.push_back(posBoids[i]);
-      nearVel.push_back(vBoids[i]);
     }
   }
+
+  // computo la velocità del boid k come somma vettoriale delle 4 componenti
   sf::Vector2f velox = {
       vBoids[k].x + separazione(d_s, s, nearBoids, posBoids[k]).x +
-          allineamento(a, nearVel, vBoids[k]).x +
+          allineamento(a, vBoids, vBoids[k]).x +
           coesione(c, nearBoids, posBoids[k]).x,
       vBoids[k].y + separazione(d_s, s, nearBoids, posBoids[k]).y +
-          allineamento(a, nearVel, vBoids[k]).y +
+          allineamento(a, vBoids, vBoids[k]).y +
           coesione(c, nearBoids, posBoids[k]).y};
   return velox;
 }
@@ -54,48 +53,54 @@ sf::Vector2f separazione(float d_s, float s,
     throw std::runtime_error(
         "Errore: il parametro s dev'essere maggiore o uguale di 0");
   }
-  float vecdist = 0;
-  sf::Vector2f vSeparation = {0, 0};
 
+  //creo un vettore con la somma delle posizioni dei boids con distanza minore di d_s
+  float distance = 0;
+  sf::Vector2f vSeparation = {0, 0};
   for (auto j : nearBoids) {
     int i;
-    vecdist = sqrt(powf(vecDistance(nearBoids, posBoid_1)[i].x, 2) +
+    distance = sqrt(powf(vecDistance(nearBoids, posBoid_1)[i].x, 2) +
                    powf(vecDistance(nearBoids, posBoid_1)[i].y, 2));
-    if (fabs(vecdist) > d_s) {
+    if (fabs(distance) > d_s) {
       continue;
     }
     vSeparation.x += j.x;
     vSeparation.y += j.y;
     i++;
   }
+
+  // calcolo la velocità di separazione
   vSeparation.x = -s * vSeparation.x;
   vSeparation.y = -s * vSeparation.y;
 
   return vSeparation;
 }
 
-sf::Vector2f allineamento(float a, std::vector<sf::Vector2f> &nearVel,
+sf::Vector2f allineamento(float a, std::vector<sf::Vector2f> &vBoids,
                           sf::Vector2f &vBoid_1) {
   if (a < 0 || a > 1) {
     throw std::runtime_error("Errore: il parametro a dev'essere maggiore o "
                              "uguale di 0 e minore di 1");
   }
-  sf::Vector2f meanVel = {0, 0};
-  for (auto j : nearVel) {
 
+//calcola la media delle velocità dei boids 
+  sf::Vector2f meanVel = {0, 0};
+  for (auto j : vBoids ) {
     meanVel.x += j.y;
     meanVel.y += j.y;
   }
-  meanVel = {meanVel.x / nearVel.size(), meanVel.y / nearVel.size()};
+  meanVel = {meanVel.x / vBoids.size(), meanVel.y / vBoids.size()};
+  
+// calcola la velocità di allineamento
   sf::Vector2f vAllineamento = {0, 0};
-
-  vAllineamento.x = a * (meanVel.x - vBoid_1.x) / (nearVel.size());
-  vAllineamento.y = a * (meanVel.y - vBoid_1.y) / (nearVel.size());
+  vAllineamento.x = a * (meanVel.x - vBoid_1.x) / (vBoids.size());
+  vAllineamento.y = a * (meanVel.y - vBoid_1.y) / (vBoids.size());
   return vAllineamento;
 }
 
 sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
                       sf::Vector2f &posBoid_1) {
+  // calcola il centro di massa dei boids vicini
   sf::Vector2f CM;
   for (auto j : nearBoids) {
 
@@ -103,15 +108,19 @@ sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
     CM.y += j.y;
   }
   CM = {CM.x / nearBoids.size(), CM.y / nearBoids.size()};
+
+  // calcola la velocità di coesione
   sf::Vector2f vCoesione = {c * (CM.x - posBoid_1.x), c * (CM.y - posBoid_1.y)};
   return vCoesione;
 }
 
 ////////////////////////////////////////////////////////////////////////
+
+//sicuro una di queste due funzioni si può eliminare
 std::vector<sf::Vector2f> vecDistance(int k,
                                       std::vector<sf::Vector2f> &posBoids) {
+  // crea un vettore con le distanze tra i boids j e il boid k
   for (auto j : posBoids) {
-
     j.x = posBoids[k].x - j.x;
     j.y = posBoids[k].y - j.y;
   }
@@ -120,8 +129,8 @@ std::vector<sf::Vector2f> vecDistance(int k,
 
 std::vector<sf::Vector2f> vecDistance(std::vector<sf::Vector2f> &nearBoids,
                                       sf::Vector2f &posBoid_1) {
+// crea un vettore con le distanze tra i boids j e il boid 1          
   for (auto j : nearBoids) {
-
     j.x = posBoid_1.x - j.x;
     j.y = posBoid_1.y - j.y;
   }
