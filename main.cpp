@@ -1,4 +1,4 @@
-// #include "flock.hpp"
+#include "flock.hpp"
 #include <chrono>
 #include <iostream>
 #include <numeric>
@@ -27,17 +27,17 @@ int main() {
   sfondo.setPosition(800.f, 0.f);
 
   sf::RectangleShape modNBoids({300.f, 40.f});
+  sf::Text usersText;
+  sf::Text usersNumText;
+  int numBoids = 1;
   modNBoids.setFillColor(sf::Color(250, 200, 150));
   modNBoids.setPosition(850.f, 0.f);
-  sf::Text usersText;
   usersText.setFont(font);
-  usersText.setString("Modify number of boids--->");
+  usersText.setString("Number of boids--------->");
   usersText.setPosition(860.f, 10.f);
   usersText.setCharacterSize(17);
   usersText.setFillColor(sf::Color::Black);
-  sf::Text usersNumText;
   usersNumText.setFont(font);
-  int numBoids = 0;
   usersNumText.setPosition(1080.f, 10.f);
   usersNumText.setCharacterSize(17);
   usersNumText.setFillColor(sf::Color::Black);
@@ -74,7 +74,7 @@ int main() {
   usersNumText3.setCharacterSize(17);
   usersNumText3.setFillColor(sf::Color::Black);
 
-   sf::RectangleShape sParam({300.f, 40.f});
+  sf::RectangleShape sParam({300.f, 40.f});
   sParam.setFillColor(sf::Color(250, 200, 150));
   sParam.setPosition(850.f, 150.f);
   sf::Text usersText4;
@@ -90,7 +90,7 @@ int main() {
   usersNumText4.setCharacterSize(17);
   usersNumText4.setFillColor(sf::Color::Black);
 
- sf::RectangleShape aParam({300.f, 40.f});
+  sf::RectangleShape aParam({300.f, 40.f});
   aParam.setFillColor(sf::Color(250, 200, 150));
   aParam.setPosition(850.f, 200.f);
   sf::Text usersText5;
@@ -121,59 +121,84 @@ int main() {
   usersNumText6.setPosition(1080.f, 260.f);
   usersNumText6.setCharacterSize(17);
   usersNumText6.setFillColor(sf::Color::Black);
-  
+  flock stormo;
+  std::cout << "to start the simulation, please insert the parameters in the "
+               "boxes on the right side of the window\n";
+ 
   while (window.isOpen()) {
     sf::Event event;
-    int i = 0;
+    
 
     while (window.pollEvent(event)) {
 
       if (event.type == sf::Event::Closed) {
         window.close();
       }
-      //serve cambiare il getposition con la posizione rispetto alla finestra non allo schermo intero
-      if (sf::Mouse::getPosition().x >= 850 &&
-          sf::Mouse::getPosition().x <= 1150 &&
-          sf::Mouse::getPosition().y >= 0 &&
-          sf::Mouse::getPosition().y <= 40 &&
-          event.type == sf::Mouse::isButtonPressed(sf::Mouse::Left) &&// sserve altro
-          numBoids >= 0 && numBoids <= 30) {                        
-        if (event.key.code == sf::Keyboard::Up) {
-        numBoids += 1;
+
+      if (sf::Mouse::getPosition(window).x >= 850.f &&
+          sf::Mouse::getPosition(window).x <= 1150.f &&
+          sf::Mouse::getPosition(window).y >= 0.f &&
+          sf::Mouse::getPosition(window).y <= 40.f &&
+          event.type == sf::Event::MouseButtonPressed &&
+          event.mouseButton.button == sf::Mouse::Left) {
+
+        std::cout << "Insert number of boids between 0 and 30:\n ";
+        std::cin >> numBoids;
+        if (numBoids > 30 || numBoids < 0) {
+          throw std::invalid_argument(
+              "Number of boids must be between 0 and 30");
+        }
         usersNumText.setString(std::to_string(numBoids));
+        stormo.setFlockSize(numBoids);
       }
-      
-      if (event.key.code == sf::Keyboard::Down && numBoids > 0) {
-        numBoids -= 1;
-        usersNumText.setString(std::to_string(numBoids));
+      if (sf::Mouse::getPosition(window).x >= 850.f &&
+          sf::Mouse::getPosition(window).x <= 1150.f &&
+          sf::Mouse::getPosition(window).y >= 50.f &&
+          sf::Mouse::getPosition(window).y <= 90.f &&
+          event.type == sf::Event::MouseButtonPressed &&
+          event.mouseButton.button == sf::Mouse::Left) {
+
+        std::cout << "Insert number d parameter:\n "; // trovare valori di d
+                                                    // possibili e modificare
+        std::cin >> dPar;
+        if (numBoids > 30 || numBoids < 0) {
+          throw std::invalid_argument(
+              "Number of boids must be between 0 and 30");
+        }
+        usersNumText2.setString(std::to_string(dPar));
       }
-    }}
+    }
 
-    /* flock stormo(numBoids);
+    
+    
+      stormo.moveFlock();//trovare modo di settare la velocità iniziale e non farla cambiate a ogni ciclo
+    
+    
+    
+    /* std::vector<sf::Vector2f> vBoids=stormo.getVelocityBoids(i);
+     stormo.moveFlock( d_sPar, dPar, sPar, aPar, cPar,
+                       vBoids);// bene ora bisogna fare in
+                               //modo che ogni mezzo
+                               // secondo calcoli la velocità
 
-     stormo.moveFlock(i , d_s, d, s, a,
-                      c, flock::getvelocityBoids()); // bene ora bisogna fare in
-     modo che ogni mezzo
-                            // secondo calcoli la velocità
 
-
-
-     // collisione con lati del window
-     if (convex.getPosition().x > 800.f) {
-       convex.setPosition(0.f, convex.getPosition().y);
-     }
-     if (convex.getPosition().y > 600.f) {
-       convex.setPosition(convex.getPosition().x, 0.f);
-     }
-     if (convex.getPosition().y < 0.f) {
-       convex.setPosition(convex.getPosition().x, 600.f);
-     }
-     if (convex.getPosition().x < 0.f) {
-       convex.setPosition(800.f, convex.getPosition().y);
-     }
- */
-
-    i++;
+                      // collisione con lati del window
+                      if (convex.getPosition().x > 800.f) {
+                        convex.setPosition(0.f, convex.getPosition().y);
+                      }
+                      if (convex.getPosition().y > 600.f) {
+                        convex.setPosition(convex.getPosition().x, 0.f);
+                      }
+                      if (convex.getPosition().y < 0.f) {
+                        convex.setPosition(convex.getPosition().x, 600.f);
+                      }
+                      if (convex.getPosition().x < 0.f) {
+                        convex.setPosition(800.f, convex.getPosition().y);
+                      }*/
+    
+    
+    
+    
     window.clear(sf::Color(0, 226, 238));
     window.draw(sfondo);
     window.draw(modNBoids);
@@ -185,17 +210,17 @@ int main() {
     window.draw(d_sParam);
     window.draw(usersText3);
     window.draw(usersNumText3);
-     window.draw(sParam);
+    window.draw(sParam);
     window.draw(usersText4);
     window.draw(usersNumText4);
-     window.draw(aParam);
+    window.draw(aParam);
     window.draw(usersText5);
     window.draw(usersNumText5);
-      window.draw(cParam);
+    window.draw(cParam);
     window.draw(usersText6);
     window.draw(usersNumText6);
+    stormo.drawFlock(window);
     window.display();
-    
   }
   return 0;
 }

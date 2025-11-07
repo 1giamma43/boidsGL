@@ -4,13 +4,18 @@
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
-#include "doctest.h"
+//#include "doctest.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <array>
 #include <cmath>
 #include <iostream>
 #include <vector>
 
+/*std::vector<sf::Vector2f> velocityi_1(int i,float k, float d_s, float d, float s, float a, float c,
+                       std::vector<sf::Vector2f> &posBoids,
+                       std::vector<sf::Vector2f> &vBoids){
+  veloxBoid(k,d_s,d,s,a,c,posBoids,vBoids);
+}*/
 
 sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &posBoids,

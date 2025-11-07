@@ -1,55 +1,62 @@
 #include "flock.hpp"
+#include <chrono>
 
-// bisogna creare l'altra finestra in cui mettiamo la
-// possibilità di variare i parametri e poi si può
-// fare la velocità
-void flock::moveFlock(float d_s,float d, float s, float a, float c,
-                 std::vector<sf::Vector2f> &vBoids) {
-  for (auto b:flock_)
-  {  
-    int i=0;
-  b.moveBoid();
+// determina il movimento dello stormo
+/*void flock::moveFlock(float d_s, float d, float s, float a, float c,
+                      std::vector<sf::Vector2f> &vBoids) {
 
-  veloxBoid(i,d_s,d,s,a,c, getPositionBoids() ,getvelocityBoids() );
+  for (auto b : flock_) {
+    int j = 0;
+    b.moveBoid();
+   std::vector<sf::Vector2f> pBoids= getPositionBoids();
+   std::vector<sf::Vector2f> vBoids= getVelocityBoids(j);
+    veloxBoid(j,d_s, d, s, a, c, pBoids, vBoids).x;
 
-  i++;
+    j++;
+  }
+
 }
-}
 
- std::vector<sf::Vector2f> flock::getPositionBoids() {
-   std::vector<sf::Vector2f> posBoids={{}};
-   for (auto i: flock_)
-   {
+// restituisce le posizioni di tutti i boids nello stormo
+std::vector<sf::Vector2f> flock::getPositionBoids() {
+  std::vector<sf::Vector2f> posBoids = {{}};
+  for (auto i : flock_) {
     posBoids.push_back(i.getpositionb());
-   }
-   return posBoids;
-
+  }
+  return posBoids;
 }
 
-std::vector<sf::Vector2f> flock::getvelocityBoids() {
-    std::vector<sf::Vector2f> velocityBoids={{}};
-    for (auto i: flock_)
-    {
-      
+// restituisce le velocità di tutti i boids nello stormo
+std::vector<sf::Vector2f> flock::getVelocityBoids(int i) {
+  std::vector<sf::Vector2f> velocityBoids = {{}};
+  for (auto j : flock_) {
+  }
+
+  return;
+}*/
+
+// disegna i boids nella finestra
+void flock::drawFlock(sf::RenderWindow &window) {
+  for (auto j : flock_) {
+    j.drawBoid(window);
+  }
+}
+
+void flock::setFlockSize(int numBoids) {
+  if (numBoids != flock_.size()) {   
+    if (numBoids > flock_.size()) {
+      while (flock_.size() < numBoids) {
+        boids m;
+        flock_.push_back(m);
+      }
+    } else {
+      flock_[rand() % (flock_.size() - 1)].eraseBoid();
     }
-    
-return ; 
+  }
 }
 
-void flock::renderWindow() {
-  // crea le finestre
-  sf::RenderWindow window(sf::VideoMode({800, 600}),
-                          "simulation of a flock of boids");
-  sf::RenderWindow optionsWindow(sf::VideoMode({200, 600}), "options window");
+void flock::moveFlock() {
+  for (size_t i = 0; i < flock_.size(); i++)
+  {
+  flock_[i].moveBoid();}
 }
-
-void flock::updateWindow() { // mettere?
-}
-void flock::drawBoids(sf::RenderWindow &window) {
-  // disegnare tutti i boids
-  window.draw(flock_[1]); // problema perchè non può disegnare i "boids" credo
-                          // perchè non sono shapes
-}
-
-void flock::display() {}
-
