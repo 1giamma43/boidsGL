@@ -9,13 +9,18 @@
 
 class boids {
   sf::ConvexShape boid_1_;
+  
 
 public:
+
   boids();
   void drawBoid(sf::RenderWindow &window);
   void eraseBoid();
   void moveBoid();
-  /*sf::Vector2f getpositionb();*/
+  sf::Vector2f getpositionb();
+  void setPositionBoid(float x,float y);
   void getdistance(); // serve?
+  float horizontalV = static_cast<float>(rand() % 10 - 5);
+  float verticalV = static_cast<float>(rand() % 10 - 5);
 };
 #endif

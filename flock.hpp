@@ -19,6 +19,10 @@ public:
                  std::vector<sf::Vector2f> &vBoids);*/
   void drawFlock(sf::RenderWindow &window);
   void moveFlock();
+  
+  void collision();
+  std::vector<boids>::iterator begin(){return flock_.begin();}
+   std::vector<boids>::iterator end(){return flock_.end();}
 };
 
 #endif

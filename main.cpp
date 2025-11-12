@@ -122,12 +122,12 @@ int main() {
   usersNumText6.setCharacterSize(17);
   usersNumText6.setFillColor(sf::Color::Black);
   flock stormo;
+  stormo.setFlockSize(numBoids);
   std::cout << "to start the simulation, please insert the parameters in the "
                "boxes on the right side of the window\n";
- 
+
   while (window.isOpen()) {
     sf::Event event;
-    
 
     while (window.pollEvent(event)) {
 
@@ -159,7 +159,7 @@ int main() {
           event.mouseButton.button == sf::Mouse::Left) {
 
         std::cout << "Insert number d parameter:\n "; // trovare valori di d
-                                                    // possibili e modificare
+                                                      // possibili e modificare
         std::cin >> dPar;
         if (numBoids > 30 || numBoids < 0) {
           throw std::invalid_argument(
@@ -169,36 +169,18 @@ int main() {
       }
     }
 
-    
-    
-      stormo.moveFlock();//trovare modo di settare la velocità iniziale e non farla cambiate a ogni ciclo
-    
-    
-    
+    stormo.moveFlock();
+    stormo.collision();
     /* std::vector<sf::Vector2f> vBoids=stormo.getVelocityBoids(i);
      stormo.moveFlock( d_sPar, dPar, sPar, aPar, cPar,
                        vBoids);// bene ora bisogna fare in
                                //modo che ogni mezzo
                                // secondo calcoli la velocità
+*/
 
 
-                      // collisione con lati del window
-                      if (convex.getPosition().x > 800.f) {
-                        convex.setPosition(0.f, convex.getPosition().y);
-                      }
-                      if (convex.getPosition().y > 600.f) {
-                        convex.setPosition(convex.getPosition().x, 0.f);
-                      }
-                      if (convex.getPosition().y < 0.f) {
-                        convex.setPosition(convex.getPosition().x, 600.f);
-                      }
-                      if (convex.getPosition().x < 0.f) {
-                        convex.setPosition(800.f, convex.getPosition().y);
-                      }*/
-    
-    
-    
-    
+
+
     window.clear(sf::Color(0, 226, 238));
     window.draw(sfondo);
     window.draw(modNBoids);

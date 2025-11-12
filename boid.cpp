@@ -26,19 +26,22 @@ void boids::eraseBoid() { boids::~boids(); }
 void boids::moveBoid() {
   // dà al boid una velocità casuale entro il range di -5.f e 5.f sulla x e
   // sulla y
-  float q = static_cast<float>(rand() % 10 - 5);
-  float p = static_cast<float>(rand() % 10 - 5);
+  
   // per calcolare la velocità del boid ogni secondo ho bisogno della velocità
   // del boid il secondo precedente, se non impiega troppa memoria posso farlo
   // anche mezzo secondo prima o anche meno, usare la libreria chrono non so come...
-  boid_1_.move({q, p});
+  boid_1_.move({horizontalV, verticalV});
   
 }
 
 // restituisce la posizione del boid
- /*sf::Vector2f boids::getpositionb() {
+ sf::Vector2f boids::getpositionb() {
   sf::Vector2f position=boid_1_.getPosition();
-  return position; }*/
+  return position; } 
 
   // restituisce la distanza tra i boids 
 void boids::getdistance() {}
+
+void boids::setPositionBoid(float x, float y) {
+  boid_1_.setPosition({x, y});
+}

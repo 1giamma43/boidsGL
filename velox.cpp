@@ -4,15 +4,16 @@
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
-//#include "doctest.h"
+// #include "doctest.h"
 #include <SFML/Graphics/Texture.hpp>
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <iostream>
-#include <vector>
+#include <numeric>
 
-/*std::vector<sf::Vector2f> velocityi_1(int i,float k, float d_s, float d, float s, float a, float c,
-                       std::vector<sf::Vector2f> &posBoids,
+/*std::vector<sf::Vector2f> velocityi_1(int i,float k, float d_s, float d, float
+s, float a, float c, std::vector<sf::Vector2f> &posBoids,
                        std::vector<sf::Vector2f> &vBoids){
   veloxBoid(k,d_s,d,s,a,c,posBoids,vBoids);
 }*/
@@ -20,7 +21,7 @@
 sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &posBoids,
                        std::vector<sf::Vector2f> &vBoids) {
-//crea un vettore con le distanze tra i boids j e il boid k
+  // crea un vettore con le distanze tra i boids j e il boid k
   std::vector<float> vecModDistanze = {};
   for (long unsigned int i = 0; i < posBoids.size(); i++) {
     if (i = k) {
@@ -30,7 +31,8 @@ sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
                                   powf(vecDistance(k, posBoids)[i].y, 2)));
   }
 
-// crea 1 vettore con solo le posizioni dei boids che stanno entro la distanza d
+  // crea 1 vettore con solo le posizioni dei boids che stanno entro la distanza
+  // d
   std::vector<sf::Vector2f> nearBoids = {{}};
 
   for (long unsigned int i = 0; i < posBoids.size(); i++) {
@@ -59,13 +61,14 @@ sf::Vector2f separazione(float d_s, float s,
         "Errore: il parametro s dev'essere maggiore o uguale di 0");
   }
 
-  //creo un vettore con la somma delle posizioni dei boids con distanza minore di d_s
+  // creo un vettore con la somma delle posizioni dei boids con distanza minore
+  // di d_s
   float distance = 0;
   sf::Vector2f vSeparation = {0, 0};
-  for (auto j : nearBoids) {
+  for (auto &j : nearBoids) {
     int i;
     distance = sqrt(powf(vecDistance(nearBoids, posBoid_1)[i].x, 2) +
-                   powf(vecDistance(nearBoids, posBoid_1)[i].y, 2));
+                    powf(vecDistance(nearBoids, posBoid_1)[i].y, 2));
     if (fabs(distance) > d_s) {
       continue;
     }
@@ -88,15 +91,15 @@ sf::Vector2f allineamento(float a, std::vector<sf::Vector2f> &vBoids,
                              "uguale di 0 e minore di 1");
   }
 
-//calcola la media delle velocità dei boids 
+  // calcola la media delle velocità dei boids
   sf::Vector2f meanVel = {0, 0};
-  for (auto j : vBoids ) {
-    meanVel.x += j.y;
+  for (auto &j : vBoids) {
+    meanVel.x += j.x;
     meanVel.y += j.y;
   }
   meanVel = {meanVel.x / vBoids.size(), meanVel.y / vBoids.size()};
-  
-// calcola la velocità di allineamento
+
+  // calcola la velocità di allineamento
   sf::Vector2f vAllineamento = {0, 0};
   vAllineamento.x = a * (meanVel.x - vBoid_1.x) / (vBoids.size());
   vAllineamento.y = a * (meanVel.y - vBoid_1.y) / (vBoids.size());
@@ -107,7 +110,8 @@ sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
                       sf::Vector2f &posBoid_1) {
   // calcola il centro di massa dei boids vicini
   sf::Vector2f CM;
-  for (auto j : nearBoids) {
+
+  for (auto &j : nearBoids) {
 
     CM.x += j.x;
     CM.y += j.y;
@@ -121,11 +125,11 @@ sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
 
 ////////////////////////////////////////////////////////////////////////
 
-//sicuro una di queste due funzioni si può eliminare
+// sicuro una di queste due funzioni si può eliminare
 std::vector<sf::Vector2f> vecDistance(int k,
                                       std::vector<sf::Vector2f> &posBoids) {
   // crea un vettore con le distanze tra i boids j e il boid k
-  for (auto j : posBoids) {
+  for (auto &j : posBoids) {
     j.x = posBoids[k].x - j.x;
     j.y = posBoids[k].y - j.y;
   }
@@ -134,8 +138,8 @@ std::vector<sf::Vector2f> vecDistance(int k,
 
 std::vector<sf::Vector2f> vecDistance(std::vector<sf::Vector2f> &nearBoids,
                                       sf::Vector2f &posBoid_1) {
-// crea un vettore con le distanze tra i boids j e il boid 1          
-  for (auto j : nearBoids) {
+  // crea un vettore con le distanze tra i boids j e il boid 1
+  for (auto &j : nearBoids) {
     j.x = posBoid_1.x - j.x;
     j.y = posBoid_1.y - j.y;
   }
