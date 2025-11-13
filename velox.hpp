@@ -23,7 +23,7 @@ sf::Vector2f allineamento(float a, std::vector<sf::Vector2f> &vBoids,
                           sf::Vector2f &vBoid_1);
 sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
                       sf::Vector2f &posBoid_1);
-sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
+sf::Vector2f veloxBoid(int k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &posBoids,
                        std::vector<sf::Vector2f> &vBoids);
 

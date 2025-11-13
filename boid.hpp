@@ -16,7 +16,8 @@ public:
   boids();
   void drawBoid(sf::RenderWindow &window);
   void eraseBoid();
-  void moveBoid();
+  void setInitVelocity();
+  void moveBoid(sf::Vector2f velox);
   sf::Vector2f getpositionb();
   void setPositionBoid(float x,float y);
   void getdistance(); // serve?

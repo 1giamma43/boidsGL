@@ -15,7 +15,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode({1200, 600}),
                           "simulation of a flock of boids");
   window.setPosition({300, 200});
-  window.setFramerateLimit(40);
+  window.setFramerateLimit(15);
 
   //////////////////////////////////////////////////////
   sf::Font font;
@@ -53,7 +53,7 @@ int main() {
   usersText2.setFillColor(sf::Color::Black);
   sf::Text usersNumText2;
   usersNumText2.setFont(font);
-  float dPar = 0.f;
+  float dPar = 0.5f;
   usersNumText2.setPosition(1080.f, 60.f);
   usersNumText2.setCharacterSize(17);
   usersNumText2.setFillColor(sf::Color::Black);
@@ -69,7 +69,7 @@ int main() {
   usersText3.setFillColor(sf::Color::Black);
   sf::Text usersNumText3;
   usersNumText3.setFont(font);
-  float d_sPar = 0.f;
+  float d_sPar = 0.5f;
   usersNumText3.setPosition(1080.f, 110.f);
   usersNumText3.setCharacterSize(17);
   usersNumText3.setFillColor(sf::Color::Black);
@@ -85,7 +85,7 @@ int main() {
   usersText4.setFillColor(sf::Color::Black);
   sf::Text usersNumText4;
   usersNumText4.setFont(font);
-  float sPar = 0.f;
+  float sPar = 0.5f;
   usersNumText4.setPosition(1080.f, 160.f);
   usersNumText4.setCharacterSize(17);
   usersNumText4.setFillColor(sf::Color::Black);
@@ -101,7 +101,7 @@ int main() {
   usersText5.setFillColor(sf::Color::Black);
   sf::Text usersNumText5;
   usersNumText5.setFont(font);
-  float aPar = 0.f;
+  float aPar = 0.5f;
   usersNumText5.setPosition(1080.f, 210.f);
   usersNumText5.setCharacterSize(17);
   usersNumText5.setFillColor(sf::Color::Black);
@@ -117,7 +117,7 @@ int main() {
   usersText6.setFillColor(sf::Color::Black);
   sf::Text usersNumText6;
   usersNumText6.setFont(font);
-  float cPar = 0.f;
+  float cPar = 0.5f;
   usersNumText6.setPosition(1080.f, 260.f);
   usersNumText6.setCharacterSize(17);
   usersNumText6.setFillColor(sf::Color::Black);
@@ -125,6 +125,8 @@ int main() {
   stormo.setFlockSize(numBoids);
   std::cout << "to start the simulation, please insert the parameters in the "
                "boxes on the right side of the window\n";
+
+  std::vector<sf::Vector2f> posFlock = {{}};
 
   while (window.isOpen()) {
     sf::Event event;
@@ -169,17 +171,14 @@ int main() {
       }
     }
 
-    stormo.moveFlock();
+    stormo.setInitVelocityF();
     stormo.collision();
-    /* std::vector<sf::Vector2f> vBoids=stormo.getVelocityBoids(i);
-     stormo.moveFlock( d_sPar, dPar, sPar, aPar, cPar,
-                       vBoids);// bene ora bisogna fare in
-                               //modo che ogni mezzo
-                               // secondo calcoli la velocità
-*/
-
-
-
+    std::vector<sf::Vector2f> prevPosFlock = posFlock;
+    posFlock = stormo.getPositionFlock();
+    std::vector<sf::Vector2f> velocityFlock =
+        stormo.getVelocityFlock(posFlock, prevPosFlock);
+        //veloxBoid(0, d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
+   //stormo.moveFlock(d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
 
     window.clear(sf::Color(0, 226, 238));
     window.draw(sfondo);

@@ -18,7 +18,7 @@ s, float a, float c, std::vector<sf::Vector2f> &posBoids,
   veloxBoid(k,d_s,d,s,a,c,posBoids,vBoids);
 }*/
 
-sf::Vector2f veloxBoid(float k, float d_s, float d, float s, float a, float c,
+sf::Vector2f veloxBoid(int k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &posBoids,
                        std::vector<sf::Vector2f> &vBoids) {
   // crea un vettore con le distanze tra i boids j e il boid k
@@ -65,8 +65,9 @@ sf::Vector2f separazione(float d_s, float s,
   // di d_s
   float distance = 0;
   sf::Vector2f vSeparation = {0, 0};
+  int i=0;
   for (auto &j : nearBoids) {
-    int i;
+    
     distance = sqrt(powf(vecDistance(nearBoids, posBoid_1)[i].x, 2) +
                     powf(vecDistance(nearBoids, posBoid_1)[i].y, 2));
     if (fabs(distance) > d_s) {

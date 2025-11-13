@@ -22,16 +22,15 @@ void boids::drawBoid(sf::RenderWindow &window) { window.draw(boid_1_); }
 // elimina un boid
 void boids::eraseBoid() { boids::~boids(); }
 
-//muove un boid
-void boids::moveBoid() {
+//imposta la velocità inziale di un boid
+void boids::setInitVelocity() {
   // dà al boid una velocità casuale entro il range di -5.f e 5.f sulla x e
   // sulla y
-  
-  // per calcolare la velocità del boid ogni secondo ho bisogno della velocità
-  // del boid il secondo precedente, se non impiega troppa memoria posso farlo
-  // anche mezzo secondo prima o anche meno, usare la libreria chrono non so come...
   boid_1_.move({horizontalV, verticalV});
   
+}
+void boids::moveBoid(sf::Vector2f velox) {
+  boid_1_.move(velox);
 }
 
 // restituisce la posizione del boid
