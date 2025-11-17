@@ -14,6 +14,7 @@ boids::boids() {boid_1_.setPointCount(4);
     boid_1_.setFillColor(sf::Color(204, 77, 5));
     boid_1_.setPosition(rand() % 800, rand() % 600);
     boid_1_.scale(0.4f,0.4f);  
+   
     
   }
 
@@ -43,4 +44,8 @@ void boids::getdistance() {}
 
 void boids::setPositionBoid(float x, float y) {
   boid_1_.setPosition({x, y});
+}
+
+void boids::rotate(float angle) {
+  boid_1_.rotate(angle);
 }

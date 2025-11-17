@@ -1,5 +1,5 @@
-#include "flock.hpp"
-#include <chrono>
+#include "options.hpp"
+
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -53,7 +53,7 @@ int main() {
   usersText2.setFillColor(sf::Color::Black);
   sf::Text usersNumText2;
   usersNumText2.setFont(font);
-  float dPar = 0.5f;
+  float dPar = 100.f;
   usersNumText2.setPosition(1080.f, 60.f);
   usersNumText2.setCharacterSize(17);
   usersNumText2.setFillColor(sf::Color::Black);
@@ -69,7 +69,7 @@ int main() {
   usersText3.setFillColor(sf::Color::Black);
   sf::Text usersNumText3;
   usersNumText3.setFont(font);
-  float d_sPar = 0.5f;
+  float d_sPar = 5.f;
   usersNumText3.setPosition(1080.f, 110.f);
   usersNumText3.setCharacterSize(17);
   usersNumText3.setFillColor(sf::Color::Black);
@@ -85,7 +85,7 @@ int main() {
   usersText4.setFillColor(sf::Color::Black);
   sf::Text usersNumText4;
   usersNumText4.setFont(font);
-  float sPar = 0.5f;
+  float sPar = 5.f;
   usersNumText4.setPosition(1080.f, 160.f);
   usersNumText4.setCharacterSize(17);
   usersNumText4.setFillColor(sf::Color::Black);
@@ -101,7 +101,7 @@ int main() {
   usersText5.setFillColor(sf::Color::Black);
   sf::Text usersNumText5;
   usersNumText5.setFont(font);
-  float aPar = 0.5f;
+  float aPar = 0.9f;
   usersNumText5.setPosition(1080.f, 210.f);
   usersNumText5.setCharacterSize(17);
   usersNumText5.setFillColor(sf::Color::Black);
@@ -117,7 +117,7 @@ int main() {
   usersText6.setFillColor(sf::Color::Black);
   sf::Text usersNumText6;
   usersNumText6.setFont(font);
-  float cPar = 0.5f;
+  float cPar = 5.f;
   usersNumText6.setPosition(1080.f, 260.f);
   usersNumText6.setCharacterSize(17);
   usersNumText6.setFillColor(sf::Color::Black);
@@ -137,36 +137,21 @@ int main() {
         window.close();
       }
 
-      if (sf::Mouse::getPosition(window).x >= 850.f &&
-          sf::Mouse::getPosition(window).x <= 1150.f &&
-          sf::Mouse::getPosition(window).y >= 0.f &&
-          sf::Mouse::getPosition(window).y <= 40.f &&
-          event.type == sf::Event::MouseButtonPressed &&
-          event.mouseButton.button == sf::Mouse::Left) {
-
-        std::cout << "Insert number of boids between 0 and 30:\n ";
-        std::cin >> numBoids;
-        if (numBoids > 30 || numBoids < 0) {
-          throw std::invalid_argument(
-              "Number of boids must be between 0 and 30");
-        }
-        usersNumText.setString(std::to_string(numBoids));
+      // capire perchè non funziona
+      //ipotesi di soluzione: potrei toglierlo da qua e creare dentro la funzione direttamente il pollevent
+      numBoids = insertParameters(modNBoids, event, numBoids, usersNumText);
         stormo.setFlockSize(numBoids);
-      }
-      if (sf::Mouse::getPosition(window).x >= 850.f &&
-          sf::Mouse::getPosition(window).x <= 1150.f &&
-          sf::Mouse::getPosition(window).y >= 50.f &&
-          sf::Mouse::getPosition(window).y <= 90.f &&
+      
+
+        
+      if (dParam.getGlobalBounds().contains(sf::Mouse::getPosition(window).x,
+                                            sf::Mouse::getPosition(window).y) &&
           event.type == sf::Event::MouseButtonPressed &&
           event.mouseButton.button == sf::Mouse::Left) {
 
         std::cout << "Insert number d parameter:\n "; // trovare valori di d
                                                       // possibili e modificare
         std::cin >> dPar;
-        if (numBoids > 30 || numBoids < 0) {
-          throw std::invalid_argument(
-              "Number of boids must be between 0 and 30");
-        }
         usersNumText2.setString(std::to_string(dPar));
       }
     }
@@ -177,8 +162,8 @@ int main() {
     posFlock = stormo.getPositionFlock();
     std::vector<sf::Vector2f> velocityFlock =
         stormo.getVelocityFlock(posFlock, prevPosFlock);
-        //veloxBoid(0, d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
-   //stormo.moveFlock(d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
+
+    stormo.moveFlock(d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
 
     window.clear(sf::Color(0, 226, 238));
     window.draw(sfondo);

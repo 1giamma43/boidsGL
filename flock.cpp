@@ -31,6 +31,7 @@ flock::getVelocityFlock(std::vector<sf::Vector2f> &posFlock,
 }
 
 void flock::setFlockSize(int numBoids) {
+  assert(numBoids >= 0 && numBoids <= 30);
   if (numBoids != flock_.size()) {
     if (numBoids > flock_.size()) {
       while (flock_.size() < numBoids) {
@@ -58,13 +59,24 @@ void flock::setInitVelocityF() {
 void flock::moveFlock(float d_s, float d, float s, float a, float c,
                       std::vector<sf::Vector2f> &posFlock,
                       std::vector<sf::Vector2f> &vFlock) {
-  
+  sf::Vector2f vel={0.f,0.f};
   for (size_t i = 0; i < flock_.size(); i++) {
-    flock_[i].moveBoid(
-        veloxBoid(i, d_s, d, s, a, c, posFlock, vFlock));
+    vel=veloxBoid(i, d_s, d, s, a, c, posFlock, vFlock);
+    if (vel.x<50.f && vel.x>-50.f && vel.y<50.f && vel.y>-50.f)
+    {
+       flock_[i].moveBoid(
+        vel);
+    }   
   }
-
 }
+
+/*void flock::rotateFlock(std::vector<sf::Vector2f> &vBoidsPrev) {
+  for(size_t i=0; i<flock_.size(); i++){
+   
+    
+    flock_[i].rotate(angle);
+  }
+}*/
 
 void flock::collision() { // forse è meglio togliere any_of e fare tutto con un
                           // solo ciclo

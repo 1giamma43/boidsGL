@@ -6,6 +6,7 @@
 #include "SFML/Window.hpp"
 #include "velox.hpp"
 #include <SFML/Graphics/Texture.hpp>
+#include <cassert>
 
 class boids {
   sf::ConvexShape boid_1_;
@@ -23,5 +24,6 @@ public:
   void getdistance(); // serve?
   float horizontalV = static_cast<float>(rand() % 10 - 5);
   float verticalV = static_cast<float>(rand() % 10 - 5);
+  void rotate(float angle);
 };
 #endif

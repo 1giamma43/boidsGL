@@ -23,23 +23,21 @@ sf::Vector2f veloxBoid(int k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &vBoids) {
   // crea un vettore con le distanze tra i boids j e il boid k
   std::vector<float> vecModDistanze = {};
-  for (long unsigned int i = 0; i < posBoids.size(); i++) {
+  int i=0;
+  std::vector<sf::Vector2f> nearBoids = {{}};
+  for (auto &j:posBoids) {//credo sia meglio mettere l'if dentro la funzione quella là
     if (i = k) {
       continue;
     }
     vecModDistanze.push_back(sqrt(powf(vecDistance(k, posBoids)[i].x, 2) +
                                   powf(vecDistance(k, posBoids)[i].y, 2)));
-  }
-
+                                 
   // crea 1 vettore con solo le posizioni dei boids che stanno entro la distanza
   // d
-  std::vector<sf::Vector2f> nearBoids = {{}};
-
-  for (long unsigned int i = 0; i < posBoids.size(); i++) {
-
     if (vecModDistanze[i] < d) {
       nearBoids.push_back(posBoids[i]);
     }
+     i++;
   }
 
   // computo la velocità del boid k come somma vettoriale delle 4 componenti
@@ -126,7 +124,7 @@ sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
 
 ////////////////////////////////////////////////////////////////////////
 
-// sicuro una di queste due funzioni si può eliminare
+// sicuro una di queste due funzioni si può eliminare, quella con k è per tutti i boids mentre l'altra è già per i vicini
 std::vector<sf::Vector2f> vecDistance(int k,
                                       std::vector<sf::Vector2f> &posBoids) {
   // crea un vettore con le distanze tra i boids j e il boid k
