@@ -10,7 +10,8 @@
 
 class boids {
   sf::ConvexShape boid_1_;
-  
+  //float posX_;
+  //float posY_;
 
 public:
 
@@ -18,12 +19,17 @@ public:
   void drawBoid(sf::RenderWindow &window);
   void eraseBoid();
   void setInitVelocity();
-  void moveBoid(sf::Vector2f velox);
-  sf::Vector2f getpositionb();
+  void moveBoid(sf::Vector2f &velox);
   void setPositionBoid(float x,float y);
   void getdistance(); // serve?
-  float horizontalV = static_cast<float>(rand() % 10 - 5);
-  float verticalV = static_cast<float>(rand() % 10 - 5);
   void rotate(float angle);
+  float getVelocity(sf::Vector2f &vectorVelocity);
+  sf::Vector2f getpositionb();
+    float horizontalV = static_cast<float>(rand() % 10 - 5);
+  float verticalV = static_cast<float>(rand() % 10 - 5);
+  //void updatePos(float deltaTime,int k, float d_s, float d, float s, float a, float c,
+    //                  std::vector<sf::Vector2f> &posBoids,
+      //                std::vector<sf::Vector2f> &vBoids);
+
 };
 #endif

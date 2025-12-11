@@ -31,7 +31,7 @@ flock::getVelocityFlock(std::vector<sf::Vector2f> &posFlock,
 }
 
 void flock::setFlockSize(int numBoids) {
-  assert(numBoids >= 0 && numBoids <= 30);
+  assert(numBoids >= 0);
   if (numBoids != flock_.size()) {
     if (numBoids > flock_.size()) {
       while (flock_.size() < numBoids) {
@@ -59,57 +59,52 @@ void flock::setInitVelocityF() {
 void flock::moveFlock(float d_s, float d, float s, float a, float c,
                       std::vector<sf::Vector2f> &posFlock,
                       std::vector<sf::Vector2f> &vFlock) {
-  sf::Vector2f vel={0.f,0.f};
+  sf::Vector2f vel = {0.f, 0.f};
   for (size_t i = 0; i < flock_.size(); i++) {
-    vel=veloxBoid(i, d_s, d, s, a, c, posFlock, vFlock);
-    if (vel.x<50.f && vel.x>-50.f && vel.y<50.f && vel.y>-50.f)
-    {
-       flock_[i].moveBoid(
-        vel);
-    }   
+    vel = veloxBoid(i, d_s, d, s, a, c, posFlock, vFlock);
+    if (vel.x < 50.f && vel.x > -50.f && vel.y < 50.f && vel.y > -50.f) {
+      flock_[i].moveBoid(vel);
+    } else {
+      flock_[i].moveBoid(vFlock[i]);
+    }
   }
 }
 
 /*void flock::rotateFlock(std::vector<sf::Vector2f> &vBoidsPrev) {
   for(size_t i=0; i<flock_.size(); i++){
-   
-    
+
+
     flock_[i].rotate(angle);
   }
 }*/
 
-void flock::collision() { // forse è meglio togliere any_of e fare tutto con un
-                          // solo ciclo
-  if (std::any_of(flock_.begin(), flock_.end(),
-                  [](boids &boid) { return boid.getpositionb().x > 800.f; })) {
-    for (auto &b : flock_) {
-      if (b.getpositionb().x > 800.f) {
-        b.setPositionBoid(0.f, b.getpositionb().y);
-      }
+void flock::collision() { 
+
+  for (auto &b : flock_) {
+    if (b.getpositionb().x > 1000.f) {
+      float p=b.getpositionb().x-1000.f;
+      b.setPositionBoid(p, b.getpositionb().y);
     }
   }
-  if (std::any_of(flock_.begin(), flock_.end(),
-                  [](boids &boid) { return boid.getpositionb().x < 0.f; })) {
-    for (auto &b : flock_) {
-      if (b.getpositionb().x < 0.f) {
-        b.setPositionBoid(800.f, b.getpositionb().y);
-      }
+
+  for (auto &b : flock_) {
+    if (b.getpositionb().x < 0.f) {
+      float p=1000.f+b.getpositionb().x;
+      b.setPositionBoid(p, b.getpositionb().y);
     }
   }
-  if (std::any_of(flock_.begin(), flock_.end(),
-                  [](boids &boid) { return boid.getpositionb().y > 600.f; })) {
-    for (auto &b : flock_) {
-      if (b.getpositionb().y > 600.f) {
-        b.setPositionBoid(b.getpositionb().x, 0.f);
-      }
+
+  for (auto &b : flock_) {
+    if (b.getpositionb().y > 600.f) {
+      float p=b.getpositionb().y-600.f;
+      b.setPositionBoid(b.getpositionb().x, p);
     }
   }
-  if (std::any_of(flock_.begin(), flock_.end(),
-                  [](boids &boid) { return boid.getpositionb().y < 0.f; })) {
-    for (auto &b : flock_) {
-      if (b.getpositionb().y < 0.f) {
-        b.setPositionBoid(b.getpositionb().x, 600.f);
-      }
+
+  for (auto &b : flock_) {
+    if (b.getpositionb().y < 0.f) {
+      float p=600.f+b.getpositionb().y;
+      b.setPositionBoid(b.getpositionb().x, p);
     }
   }
 }
