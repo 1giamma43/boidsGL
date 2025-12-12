@@ -48,7 +48,7 @@ int main() {
                 OutLabel1);
 
   int numBoids = 13;
-  float dPar = 100.f, d_sPar = 20.f, sPar = 0.01f, aPar = 0.f, cPar = 0.05f;
+  float dPar = 100.f, d_sPar = 20.f, sPar = 0.001f, aPar = 0.001f, cPar = 0.01f;
 
   flock stormo;
   /*numBoids = insertParameters<int>( window, modNBoids, numBoids,
@@ -93,22 +93,19 @@ int main() {
           insertParameters<float>(event, window, cParam, cPar, usersNumText6);
     }
 
-    // stormo.setInitVelocityF();// credo che questo vada messo dopo aver
-    // settato la dimensione dello stormo altrimenti ogni frame resetta le
-    // velocità
     stormo.collision();
     std::vector<sf::Vector2f> prevPosFlock = posFlock;
     posFlock = stormo.getPositionFlock();
     std::vector<sf::Vector2f> velocityFlock =
         stormo.getVelocityFlock(posFlock, prevPosFlock);
-   /* std::cout << veloxBoid(0, d_sPar, dPar, sPar, aPar, cPar, posFlock,
+    std::cout << veloxBoid(7, d_sPar, dPar, sPar, aPar, cPar, posFlock,
                            velocityFlock)
                      .x
               << ","
-              << veloxBoid(0, d_sPar, dPar, sPar, aPar, cPar, posFlock,
+              << veloxBoid(3, d_sPar, dPar, sPar, aPar, cPar, posFlock,
                            velocityFlock)
                      .y
-              << "\n";*/
+              << "\n";
     /*// i boids si incastrano in alto a sinistra perchè la distanza tecnicamente
     // è più di mille però noi vogliamo pensare lo spazio come toroidale quindi
     // in teoria dovremmo considerarli vicini... come si fa?
@@ -126,7 +123,7 @@ int main() {
   
 }}
 */
-  
+  //per qualche motivo vanno tutti verso l'alto a sinistra 
 
 
 

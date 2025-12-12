@@ -19,17 +19,15 @@ sf::Vector2f veloxBoid(int k, float d_s, float d, float s, float a, float c,
                        std::vector<sf::Vector2f> &vBoids) {
   // crea un vettore con le distanze tra i boids j e il boid k
   std::vector<float> vecModDistanze = {0.f};
-  int i = 0;
-  std::vector<sf::Vector2f> nearBoids = {{0.f, 0.f}}, nearVelocity = {{}};
-  for (auto &j : posBoids) {
+  std::vector<sf::Vector2f> nearBoids = {{0.f, 0.f}}, nearVelocity = {{0.f,0.f}};
+  for (long unsigned int i = 0; i < posBoids.size(); i++) {
     // credo sia meglio mettere l'if dentro la funzione quella là
     if (i == k) {
       continue;
     }
-    vecModDistanze.push_back(
-        sqrt(powf(vecDistance(posBoids, posBoids[k])[i].x, 2) +
-             powf(vecDistance(posBoids, posBoids[k])[i].y, 2)));
-    i++;
+    float distance = sqrt(powf(vecDistance(posBoids, posBoids[k])[i].x, 2) +
+             powf(vecDistance(posBoids, posBoids[k])[i].y, 2));
+    vecModDistanze.push_back(distance);
   }
   // è possibile usare un solo for? apparentemente no per qualche ragione
   //  crea 1 vettore con solo le posizioni dei boids che stanno entro la
@@ -124,11 +122,11 @@ sf::Vector2f coesione(float c, std::vector<sf::Vector2f> &nearBoids,
 std::vector<sf::Vector2f> vecDistance(std::vector<sf::Vector2f> &nearBoids,
                                       sf::Vector2f &posBoid_1) {
   // crea un vettore con le distanze tra i boids j e il boid 1
+  std::vector<sf::Vector2f> nearBoids2={{}};
   for (auto &j : nearBoids) {
-    j.x = posBoid_1.x - j.x;
-    j.y = posBoid_1.y - j.y;
+    nearBoids2.push_back( {j.x - posBoid_1.x, j.y -posBoid_1.y}) ;
   }
-  return nearBoids;
+  return nearBoids2;
 }
 
 // BISOGNA RIFARE TUTTI I TEST

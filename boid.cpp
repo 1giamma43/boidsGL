@@ -12,7 +12,7 @@ boids::boids() {
   boid_1_.setPoint(2, {40.f, 30.f});
   boid_1_.setPoint(3, {30.f, 50.f});
   boid_1_.setFillColor(sf::Color(204, 77, 5));
-  boid_1_.setOrigin({30.f,25.f});
+  boid_1_.setOrigin({7.5f,6.25f});
   boid_1_.scale(0.25f, 0.25f);
   float p=rand()%1000;
   float q=rand()%600;

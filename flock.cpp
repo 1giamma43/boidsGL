@@ -64,9 +64,7 @@ void flock::moveFlock(float d_s, float d, float s, float a, float c,
     vel = veloxBoid(i, d_s, d, s, a, c, posFlock, vFlock);
     if (vel.x < 50.f && vel.x > -50.f && vel.y < 50.f && vel.y > -50.f) {
       flock_[i].moveBoid(vel);
-    } else {
-      flock_[i].moveBoid(vFlock[i]);
-    }
+    } 
   }
 }
 
