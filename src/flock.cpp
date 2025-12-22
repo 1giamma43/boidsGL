@@ -11,8 +11,8 @@ void flock::drawFlock(sf::RenderWindow &window) {
 // restituisce le posizioni di tutti i boids nello stormo
 std::vector<sf::Vector2f> flock::getPositionFlock() {
   std::vector<sf::Vector2f> posBoids;
-  for (auto i : flock_) {
-    posBoids.push_back(i.getpositionb());
+  for (auto b : flock_) {
+    posBoids.push_back(b.getpositionb());
   }
   return posBoids;
 }
@@ -39,10 +39,8 @@ void flock::setFlockSize(int numBoids) {
       }
     } else {
       while (numBoids < flock_.size()) {
-        // per adesso funziona però secondo me ha problemi di memoria
         int i = rand() % (flock_.size() - 1);
         flock_.erase(flock_.begin() + i);
-        // flock_[i].eraseBoid();// capire come usare
         flock_.shrink_to_fit();
       }
     }

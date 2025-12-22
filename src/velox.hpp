@@ -8,15 +8,17 @@
 #include <array>
 #include <cmath>
 #include <functional>
+#include <numeric>
 #include <vector>
+#include <string>
 
 std::vector<sf::Vector2f> vecDistance(std::vector<sf::Vector2f> &nearBoids,
                                       sf::Vector2f &posBoid_1);
-std::vector<float> vecModDistance(int k, std::vector<sf::Vector2f> &posBoids,
-                                  sf::Vector2f &posBoid_1);
-std::vector<float> vecModVelox(std::vector<sf::Vector2f>& velocityVector);
+std::vector<float> vecModDistance(int k, std::vector<sf::Vector2f> &posBoids);
+std::vector<float> vecModVelox(std::vector<sf::Vector2f> &velocityVector);
 float calculateMean(std::vector<float> &u);
-float calculateStdDeviation(std::vector<float>& vector);
+float calculateStdDeviation(std::vector<float> &vector);
+std::string stringMeanDistance(std::vector<sf::Vector2f> &positionBoids);
 ////////////////////////////////////////////////////
 
 sf::Vector2f separazione(float d_s, float s,

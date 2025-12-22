@@ -1,16 +1,11 @@
 #include "options.hpp"
-
 #include <iostream>
-#include <numeric>
 #include <string>
-#include <vector>
 
 // COSE DA FARE:ottimizzare, i test per tutte le funzioni anche quelle non
-// numeriche(non so come), inserire il parametro di distanza
-// media tra i boids con deviazione standard, se riesco faccio
+// numeriche(non so come), se riesco faccio
 // il predatore (i boids applicano su di esso solo la separazione, mentre i
-// predatori applicano solo la coesione con i boids ti direi) magari aggiungere
-// qualche nuvola nello sfondo
+// predatori applicano solo la coesione con i boids ti direi)
 
 int main() {
 
@@ -25,18 +20,18 @@ int main() {
   sf::RectangleShape sfondo({400.f, 600.f});
   sfondo.setFillColor(sf::Color(0, 0, 0));
   sfondo.setPosition(1000.f, 0.f);
-  
-  sf::Texture texture1,texture2;
+
+  sf::Texture texture1, texture2;
   texture1.loadFromFile("nuvola.png");
-  sf::Sprite cloud1,sun;
+  sf::Sprite cloud1, sun;
   cloud1.setTexture(texture1);
-  cloud1.setPosition({20.f,30.f});
-  cloud1.setScale({0.5f,0.5f});
+  cloud1.setPosition({20.f, 30.f});
+  cloud1.setScale({0.5f, 0.5f});
 
   texture2.loadFromFile("sole.png");
   sun.setTexture(texture2);
-  sun.setPosition({860.f,50.f});
-  sun.setScale({0.08f,0.08f});
+  sun.setPosition({860.f, 50.f});
+  sun.setScale({0.08f, 0.08f});
 
   sf::RectangleShape modNBoids({300.f, 40.f}), dParam({300.f, 40.f}),
       d_sParam({300.f, 40.f}), sParam({300.f, 40.f}), aParam({300.f, 40.f}),
@@ -55,21 +50,33 @@ int main() {
               label5 = "Modify parameter a----->",
               label6 = "Modify parameter c----->",
               OutLabel1 = "Mean distance x ------>",
-              OutLabel2 = "Mean velocity v ------>";
+              OutLabel2 = "Mean velocity v ------>",
+              x1="insert number of boids",
+              x2="insert parameter d",
+              x3="insert parameter d_s",
+              x4="insert parameter s",
+              x5="insert parameter a",
+              x6="insert parameter c";
 
   float y = 0.f, y2 = 50.f, y3 = 100.f, y4 = 150.f, y5 = 200.f, y6 = 250.f,
         y7 = 500.f, y8 = 550.f;
 
   int numBoids = 13;
-  float dPar = 100.f, d_sPar = 20.f, sPar = 0.0018f, aPar = 0.001f, cPar = 0.0006f,
-        meanDistance = 0.f, meanVelocity = 0.f;
+  float dPar = 100.f, d_sPar = 20.f, sPar = 0.0018f, aPar = 0.001f,
+        cPar = 0.0006f, meanDistance = 0.f, meanVelocity = 0.f;
 
-  setParameters(window, modNBoids, usersText, usersNumText, font, y, label, numBoids);
-  setParameters(window, dParam, usersText2, usersNumText2, font, y2, label2, dPar);
-  setParameters(window, d_sParam, usersText3, usersNumText3, font, y3, label3, d_sPar);
-  setParameters(window, sParam, usersText4, usersNumText4, font, y4, label4, sPar);
-  setParameters(window, aParam, usersText5, usersNumText5, font, y5, label5, aPar);
-  setParameters(window, cParam, usersText6, usersNumText6, font, y6, label6, cPar);
+  setParameters(window, modNBoids, usersText, usersNumText, font, y, label,
+                numBoids);
+  setParameters(window, dParam, usersText2, usersNumText2, font, y2, label2,
+                dPar);
+  setParameters(window, d_sParam, usersText3, usersNumText3, font, y3, label3,
+                d_sPar);
+  setParameters(window, sParam, usersText4, usersNumText4, font, y4, label4,
+                sPar);
+  setParameters(window, aParam, usersText5, usersNumText5, font, y5, label5,
+                aPar);
+  setParameters(window, cParam, usersText6, usersNumText6, font, y6, label6,
+                cPar);
   setParameters(window, distanceParam, outputText1, outputNumText1, font, y7,
                 OutLabel1, meanDistance);
   setParameters(window, velocityParam, outputText2, outputNumText2, font, y8,
@@ -89,21 +96,21 @@ int main() {
       }
 
       numBoids = insertParameters<int>(event, window, modNBoids, numBoids,
-                                       usersNumText);
+                                       usersNumText, x1);
       stormo.setFlockSize(numBoids);
 
       d_sPar = insertParameters<float>(event, window, d_sParam, d_sPar,
-                                       usersNumText3);
+                                       usersNumText3,x3);
       // bisogna inserire la possibilità di scirvere la frase giusta e settare
       // il dominio dei numeri (tipo da uno a 30 per il numero di boids )
       dPar =
-          insertParameters<float>(event, window, dParam, dPar, usersNumText2);
+          insertParameters<float>(event, window, dParam, dPar, usersNumText2,x2);
       sPar =
-          insertParameters<float>(event, window, sParam, sPar, usersNumText4);
+          insertParameters<float>(event, window, sParam, sPar, usersNumText4,x4);
       aPar =
-          insertParameters<float>(event, window, aParam, aPar, usersNumText5);
+          insertParameters<float>(event, window, aParam, aPar, usersNumText5,x5);
       cPar =
-          insertParameters<float>(event, window, cParam, cPar, usersNumText6);
+          insertParameters<float>(event, window, cParam, cPar, usersNumText6,x6);
     }
     stormo.collision();
     std::vector<sf::Vector2f> prevPosFlock = posFlock;
@@ -132,12 +139,14 @@ veloxboid
 
 }}
 */
-    // per qualche motivo vanno tutti verso l'alto a sinistra
 
     stormo.moveFlock(veloxboid);
     std::vector<float> x = vecModVelox(veloxboid);
-    outputNumText2.setString(std::to_string(std::llroundf(calculateMean(x))) + " +/- " +
-                             std::to_string(std::llroundf(calculateStdDeviation(x))));
+    outputNumText1.setString(stringMeanDistance(posFlock));
+    //uguagliare a quello sopra
+    outputNumText2.setString(
+        std::to_string(std::llroundf(calculateMean(x))) + " +/- " +
+        std::to_string(std::llroundf(calculateStdDeviation(x))));
     // come faccio il round alla prima cifra dopo la virgola
     window.clear(sf::Color(0, 226, 208));
     window.draw(sfondo);
