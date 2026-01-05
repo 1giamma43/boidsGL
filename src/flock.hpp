@@ -1,24 +1,40 @@
 #ifndef FLOCK_HPP
 #define FLOCK_HPP
-#include "boid.hpp"
+#include "velox.hpp"
+#include <cassert>
 
+struct boid {
+  sf::ConvexShape boid;
+};
+struct obstacle {
+  sf::CircleShape circle_;
+  sf::Vector2f position_;
+};
 class flock {
 private:
-  std::vector<boids> flock_;
+  std::vector<boid> flock_;
+  std::vector<sf::Vector2f> velocityFLock_;
 
 public:
-  void setFlockSize(int numBoids);
-  inline boids operator[](int i) { return flock_[i]; }
-  inline int size() { return flock_.size(); }
-  std::vector<sf::Vector2f> getPositionFlock();
-  std::vector<sf::Vector2f>
-  getVelocityFlock(std::vector<sf::Vector2f> &posFlock,
-                   std::vector<sf::Vector2f> &prevPosFlock);
+  flock(const int numBoids);
+  void setFlockSize(const int numBoids);
   void drawFlock(sf::RenderWindow &window);
-  void moveFlock(std::vector<sf::Vector2f> &velocity);
+  const std::vector<sf::Vector2f> getPositionFlock();
   void collision();
-  inline std::vector<boids>::iterator begin() { return flock_.begin(); }
-  inline std::vector<boids>::iterator end() { return flock_.end(); }
-};
+  std::vector<sf::Vector2f> getVelocityFlock();
+  void moveFlock(const float d_s, const float d, const float s, const float a,
+                 const float c, std::vector<sf::Vector2f> &posBoids,
+                 std::vector<sf::Vector2f> &vBoids,
+                 std::array<sf::Vector2f, 4> &posObstacle);
 
+  inline boid operator[](int i) { return flock_[i]; }
+  inline int size() { return flock_.size(); }
+  inline std::vector<boid>::iterator begin() { return flock_.begin(); }
+  inline std::vector<boid>::iterator end() { return flock_.end(); }
+};
+// obstacle
+void characterizationObs(obstacle &O);
+void drawObs(sf::RenderWindow &window, obstacle &O);
+// boid
+void characterizationBoid(boid &u);
 #endif

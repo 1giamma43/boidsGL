@@ -1,11 +1,7 @@
 #include "options.hpp"
 #include <iostream>
-#include <string>
 
-// COSE DA FARE:ottimizzare, i test per tutte le funzioni anche quelle non
-// numeriche(non so come), se riesco faccio
-// il predatore (i boids applicano su di esso solo la separazione, mentre i
-// predatori applicano solo la coesione con i boids ti direi)
+// COSE DA FARE:trovare s,a,c
 
 int main() {
 
@@ -13,78 +9,105 @@ int main() {
                           "simulation of a flock of boids");
   window.setPosition({100, 100});
   window.setFramerateLimit(40);
-  // come faccio ad aumentare la sua fluidità?
   //////////////////////////////////////////////////////
 
   sf::Font font;
-  sf::RectangleShape sfondo({400.f, 600.f});
-  sfondo.setFillColor(sf::Color(0, 0, 0));
-  sfondo.setPosition(1000.f, 0.f);
+  sf::RectangleShape rectParam({400.f, 600.f});
+  rectParam.setFillColor(sf::Color(0, 0, 0));
+  rectParam.setPosition(1000.f, 0.f);
 
-  sf::Texture texture1, texture2;
-  texture1.loadFromFile("nuvola.png");
-  sf::Sprite cloud1, sun;
-  cloud1.setTexture(texture1);
-  cloud1.setPosition({20.f, 30.f});
-  cloud1.setScale({0.5f, 0.5f});
+  sf::RectangleShape nBoidsRect({300.f, 40.f});
+  sf::RectangleShape dRect({300.f, 40.f});
+  sf::RectangleShape d_sRect({300.f, 40.f});
+  sf::RectangleShape sRect({300.f, 40.f});
+  sf::RectangleShape aRect({300.f, 40.f});
+  sf::RectangleShape cRect({300.f, 40.f});
+  sf::RectangleShape distanceRect({300.f, 40.f});
+  sf::RectangleShape velocityRect({300.f, 40.f});
 
-  texture2.loadFromFile("sole.png");
-  sun.setTexture(texture2);
-  sun.setPosition({860.f, 50.f});
-  sun.setScale({0.08f, 0.08f});
+  sf::Text paramText1;
+  sf::Text paramText2;
+  sf::Text paramText3;
+  sf::Text paramText4;
+  sf::Text paramText5;
+  sf::Text paramText6;
+  sf::Text outputText1;
+  sf::Text outputText2;
 
-  sf::RectangleShape modNBoids({300.f, 40.f}), dParam({300.f, 40.f}),
-      d_sParam({300.f, 40.f}), sParam({300.f, 40.f}), aParam({300.f, 40.f}),
-      cParam({300.f, 40.f}), distanceParam({300.f, 40.f}),
-      velocityParam({300.f, 40.f});
+  sf::Text paramNumText1;
+  sf::Text paramNumText2;
+  sf::Text paramNumText3;
+  sf::Text paramNumText4;
+  sf::Text paramNumText5;
+  sf::Text paramNumText6;
+  sf::Text outputNumText1;
+  sf::Text outputNumText2;
 
-  sf::Text usersText, usersText2, usersText3, usersText4, usersText5,
-      usersText6, outputText1, outputText2;
-  sf::Text usersNumText, usersNumText2, usersNumText3, usersNumText4,
-      usersNumText5, usersNumText6, outputNumText1, outputNumText2;
+  std::string label1 = "Number of boids-------->";
+  std::string label2 = "Modify parameter d----->";
+  std::string label3 = "Modify parameter d_s--->";
+  std::string label4 = "Modify parameter s----->";
+  std::string label5 = "Modify parameter a----->";
+  std::string label6 = "Modify parameter c----->";
+  std::string OutLabel1 = "Mean distance x ------>";
+  std::string OutLabel2 = "Mean velocity v ------>";
+  std::string terminalText1 = "insert number of boids";
+  std::string terminalText2 = "insert parameter d";
+  std::string terminalText3 = "insert parameter d_s";
+  std::string terminalText4 = "insert parameter s";
+  std::string terminalText5 = "insert parameter a";
+  std::string terminalText6 = "insert parameter c";
 
-  std::string label = "Number of boids-------->",
-              label2 = "Modify parameter d----->",
-              label3 = "Modify parameter d_s--->",
-              label4 = "Modify parameter s----->",
-              label5 = "Modify parameter a----->",
-              label6 = "Modify parameter c----->",
-              OutLabel1 = "Mean distance x ------>",
-              OutLabel2 = "Mean velocity v ------>",
-              x1="insert number of boids",
-              x2="insert parameter d",
-              x3="insert parameter d_s",
-              x4="insert parameter s",
-              x5="insert parameter a",
-              x6="insert parameter c";
+  const float positionRect1 = 0.f;
+  const float positionRect2 = 50.f;
+  const float positionRect3 = 100.f;
+  const float positionRect4 = 150.f;
+  const float positionRect5 = 200.f;
+  const float positionRect6 = 250.f;
+  const float positionRect7 = 500.f;
+  const float positionRect8 = 550.f;
 
-  float y = 0.f, y2 = 50.f, y3 = 100.f, y4 = 150.f, y5 = 200.f, y6 = 250.f,
-        y7 = 500.f, y8 = 550.f;
+  int numBoids = 80;
+  float dPar = 150.f;
+  float d_sPar = 25.f;
+  float sPar = 0.18f;
+  float aPar = 0.5f;
+  float cPar = 0.18f;
+  float meanDistance = 0.f;
+  float meanVelocity = 0.f;
 
-  int numBoids = 13;
-  float dPar = 100.f, d_sPar = 20.f, sPar = 0.0018f, aPar = 0.001f,
-        cPar = 0.0006f, meanDistance = 0.f, meanVelocity = 0.f;
+  setParameters(window, nBoidsRect, paramText1, paramNumText1, font,
+                positionRect1, label1, numBoids);
+  setParameters(window, dRect, paramText2, paramNumText2, font, positionRect2,
+                label2, dPar);
+  setParameters(window, d_sRect, paramText3, paramNumText3, font, positionRect3,
+                label3, d_sPar);
+  setParameters(window, sRect, paramText4, paramNumText4, font, positionRect4,
+                label4, sPar);
+  setParameters(window, aRect, paramText5, paramNumText5, font, positionRect5,
+                label5, aPar);
+  setParameters(window, cRect, paramText6, paramNumText6, font, positionRect6,
+                label6, cPar);
+  setParameters(window, distanceRect, outputText1, outputNumText1, font,
+                positionRect7, OutLabel1, meanDistance);
+  setParameters(window, velocityRect, outputText2, outputNumText2, font,
+                positionRect8, OutLabel2, meanVelocity);
 
-  setParameters(window, modNBoids, usersText, usersNumText, font, y, label,
-                numBoids);
-  setParameters(window, dParam, usersText2, usersNumText2, font, y2, label2,
-                dPar);
-  setParameters(window, d_sParam, usersText3, usersNumText3, font, y3, label3,
-                d_sPar);
-  setParameters(window, sParam, usersText4, usersNumText4, font, y4, label4,
-                sPar);
-  setParameters(window, aParam, usersText5, usersNumText5, font, y5, label5,
-                aPar);
-  setParameters(window, cParam, usersText6, usersNumText6, font, y6, label6,
-                cPar);
-  setParameters(window, distanceParam, outputText1, outputNumText1, font, y7,
-                OutLabel1, meanDistance);
-  setParameters(window, velocityParam, outputText2, outputNumText2, font, y8,
-                OutLabel2, meanVelocity);
+  const sf::Vector2f P1{35.f, 50.f};
+  const sf::Vector2f P2{400.f, 250.f};
+  const sf::Vector2f P3{325.f, 490.f};
+  const sf::Vector2f P4{830.f, 170.f};
 
-  flock stormo;
-  stormo.setFlockSize(numBoids);
-  std::vector<sf::Vector2f> posFlock = {{}};
+  obstacle O1, O2, O3, O4;
+
+  O1.position_ = P1;
+  O2.position_ = P2;
+  O3.position_ = P3;
+  O4.position_ = P4;
+  std::array<sf::Vector2f, 4> posObstacle = {P1, P2, P3, P4};
+
+  flock flo(numBoids);
+  flo.setFlockSize(numBoids);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -95,72 +118,47 @@ int main() {
         window.close();
       }
 
-      numBoids = insertParameters<int>(event, window, modNBoids, numBoids,
-                                       usersNumText, x1);
-      stormo.setFlockSize(numBoids);
+      numBoids = changeParameters<int>(event, window, nBoidsRect, numBoids,
+                                       paramNumText1, terminalText1);
 
-      d_sPar = insertParameters<float>(event, window, d_sParam, d_sPar,
-                                       usersNumText3,x3);
-      // bisogna inserire la possibilità di scirvere la frase giusta e settare
-      // il dominio dei numeri (tipo da uno a 30 per il numero di boids )
-      dPar =
-          insertParameters<float>(event, window, dParam, dPar, usersNumText2,x2);
-      sPar =
-          insertParameters<float>(event, window, sParam, sPar, usersNumText4,x4);
-      aPar =
-          insertParameters<float>(event, window, aParam, aPar, usersNumText5,x5);
-      cPar =
-          insertParameters<float>(event, window, cParam, cPar, usersNumText6,x6);
+      d_sPar = changeParameters<float>(event, window, d_sRect, d_sPar,
+                                       paramNumText3, terminalText3);
+      dPar = changeParameters<float>(event, window, dRect, dPar, paramNumText2,
+                                     terminalText2);
+      sPar = changeParameters<float>(event, window, sRect, sPar, paramNumText4,
+                                     terminalText4);
+      aPar = changeParameters<float>(event, window, aRect, aPar, paramNumText5,
+                                     terminalText5);
+      cPar = changeParameters<float>(event, window, cRect, cPar, paramNumText6,
+                                     terminalText6);
     }
-    stormo.collision();
-    std::vector<sf::Vector2f> prevPosFlock = posFlock;
-    posFlock = stormo.getPositionFlock();
-    std::vector<sf::Vector2f> velocityFlock =
-        stormo.getVelocityFlock(posFlock, prevPosFlock);
-    std::vector<sf::Vector2f> veloxboid =
-        veloxBoid(d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityFlock);
-    /*// i boids si incastrano in alto a sinistra perchè la distanza
-tecnicamente
-    // è più di mille però noi vogliamo pensare lo spazio come toroidale quindi
-    // in teoria dovremmo considerarli vicini... come si fa?
-   // void Funzionediprova(){ forse è da mettere direttamente nella funzione
-veloxboid
+    if (numBoids != flo.size()) {
+      flo.setFlockSize(numBoids);
+    }
+    std::vector<sf::Vector2f> posFlock = flo.getPositionFlock();
+    std::vector<sf::Vector2f> velocityVecFlock = flo.getVelocityFlock();
+    flo.moveFlock(d_sPar, dPar, sPar, aPar, cPar, posFlock, velocityVecFlock,
+                  posObstacle);
+    flo.collision();
 
-   for (size_t i = 0; i < stormo.size(); i++)
-{
-  for (size_t j = 0; j < stormo.size(); j++)
-  {
-
-  if (1000.f-(stormo[i].getpositionb().x -stormo[j].getpositionb().x)<dPar)
-  {
-    //devo dire che la loro distanza è 1000.f-(stormo[i].getpositionb().x
--stormo[j].getpositionb().x) però come faccio a dirgli verso dove ansare?
-  }
-
-}}
-*/
-
-    stormo.moveFlock(veloxboid);
-    std::vector<float> x = vecModVelox(veloxboid);
     outputNumText1.setString(stringMeanDistance(posFlock));
-    //uguagliare a quello sopra
-    outputNumText2.setString(
-        std::to_string(std::llroundf(calculateMean(x))) + " +/- " +
-        std::to_string(std::llroundf(calculateStdDeviation(x))));
-    // come faccio il round alla prima cifra dopo la virgola
+    outputNumText2.setString(stringMeanVelox(velocityVecFlock));
+
     window.clear(sf::Color(0, 226, 208));
-    window.draw(sfondo);
-    draw(window, modNBoids, usersText, usersNumText);
-    draw(window, dParam, usersText2, usersNumText2);
-    draw(window, d_sParam, usersText3, usersNumText3);
-    draw(window, sParam, usersText4, usersNumText4);
-    draw(window, aParam, usersText5, usersNumText5);
-    draw(window, cParam, usersText6, usersNumText6);
-    draw(window, distanceParam, outputText1, outputNumText1);
-    draw(window, velocityParam, outputText2, outputNumText2);
-    window.draw(cloud1);
-    window.draw(sun);
-    stormo.drawFlock(window);
+    window.draw(rectParam);
+    draw(window, nBoidsRect, paramText1, paramNumText1);
+    draw(window, dRect, paramText2, paramNumText2);
+    draw(window, d_sRect, paramText3, paramNumText3);
+    draw(window, sRect, paramText4, paramNumText4);
+    draw(window, aRect, paramText5, paramNumText5);
+    draw(window, cRect, paramText6, paramNumText6);
+    draw(window, distanceRect, outputText1, outputNumText1);
+    draw(window, velocityRect, outputText2, outputNumText2);
+    drawObs(window, O1);
+    drawObs(window, O2);
+    drawObs(window, O3);
+    drawObs(window, O4);
+    flo.drawFlock(window);
     window.display();
   }
   return 0;
