@@ -37,8 +37,8 @@ const sf::Vector2f veloxBoid(const int k, const float d_s, const float d,
                              std::array<sf::Vector2f, 4> &posObstacle);
 
 template <typename T>
-const std::vector<float> vecModDistance(sf::Vector2f const &posBoid_k,
-                                        T const &posBoids) {
+inline const std::vector<float> vecModDistance(sf::Vector2f const &posBoid_k,
+                                               T const &posBoids) {
   std::vector<float> vecModDistanze;
   std::vector<sf::Vector2f> v;
   for (auto &b : posBoids) {
@@ -51,10 +51,9 @@ const std::vector<float> vecModDistance(sf::Vector2f const &posBoid_k,
 
   return vecModDistanze;
 }
-template<typename T>
-std::vector<sf::Vector2f> isLessThan(const std::vector<float> distances,
-                                     float par, int k,
-                                     T &v) {
+template <typename T>
+inline std::vector<sf::Vector2f> isLessThan(const std::vector<float> distances,
+                                            float par, int k, T &v) {
   std::vector<sf::Vector2f> vector;
   if (k == -1) {
     for (long unsigned int i = 0; i < distances.size(); i++) {

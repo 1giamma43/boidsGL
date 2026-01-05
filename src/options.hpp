@@ -4,9 +4,10 @@
 #include <iostream>
 
 template <typename T>
-void setParameters(sf::RenderWindow &window, sf::RectangleShape &rect,
-                   sf::Text &paramText, sf::Text &paramNumText, sf::Font &font,
-                   const float positionRect, std::string &label, T par) {
+inline void setParameters(sf::RenderWindow &window, sf::RectangleShape &rect,
+                          sf::Text &paramText, sf::Text &paramNumText,
+                          sf::Font &font, const float positionRect,
+                          std::string &label, T par) {
   rect.setSize({300.f, 40.f});
   rect.setFillColor(sf::Color(250, 200, 150));
   rect.setPosition(1050.f, positionRect);
@@ -24,9 +25,9 @@ void setParameters(sf::RenderWindow &window, sf::RectangleShape &rect,
 };
 
 template <typename T>
-T changeParameters(sf::Event &ev, sf::RenderWindow &window,
-                   sf::RectangleShape &rect, T &par, sf::Text &paramNumText,
-                   std::string &terminalText) {
+inline T changeParameters(sf::Event &ev, sf::RenderWindow &window,
+                          sf::RectangleShape &rect, T &par,
+                          sf::Text &paramNumText, std::string &terminalText) {
   if (rect.getGlobalBounds().contains(sf::Mouse::getPosition(window).x,
                                       sf::Mouse::getPosition(window).y) &&
       ev.type == sf::Event::MouseButtonPressed &&
@@ -41,8 +42,8 @@ T changeParameters(sf::Event &ev, sf::RenderWindow &window,
   return par;
 };
 
-void draw(sf::RenderWindow &window, sf::RectangleShape &rect,
-          sf::Text &paramText, sf::Text &paramNumText) {
+inline void draw(sf::RenderWindow &window, sf::RectangleShape &rect,
+                 sf::Text &paramText, sf::Text &paramNumText) {
   window.draw(rect);
   window.draw(paramText);
   window.draw(paramNumText);

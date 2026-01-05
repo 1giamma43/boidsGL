@@ -2,11 +2,11 @@
 #include <iostream>
 #include <random>
 
-flock::flock(const int numBoids) {
+fl::flock::flock(const int numBoids) {
   assert(numBoids >= 0);
   for (size_t i = 0; i < numBoids; i++) {
-    boid B;
-    characterizationBoid(B);
+    Bd::boid B;
+    Bd::characterizationBoid(B);
     std::random_device rd;
     std::uniform_int_distribution dist(-30, 30);
     sf::Vector2f q{static_cast<float>(dist(rd)), static_cast<float>(dist(rd))};
@@ -15,13 +15,13 @@ flock::flock(const int numBoids) {
   }
 }
 
-void flock::setFlockSize(const int numBoids) {
+void fl::flock::set_FlockSize(const int numBoids) {
   assert(numBoids >= 0);
   if (numBoids != flock_.size()) {
     if (numBoids > flock_.size()) {
       while (flock_.size() < numBoids) {
-        boid B;
-        characterizationBoid(B);
+        Bd::boid B;
+        Bd::characterizationBoid(B);
         std::random_device rd;
         std::uniform_int_distribution dist(-30, 30);
         sf::Vector2f q{static_cast<float>(dist(rd)),
@@ -43,20 +43,20 @@ void flock::setFlockSize(const int numBoids) {
   }
 }
 
-void flock::drawFlock(sf::RenderWindow &window) {
+void fl::flock::draw_Flock(sf::RenderWindow &window) {
   for (auto &j : flock_) {
     window.draw(j.boid);
   }
 }
 
-const std::vector<sf::Vector2f> flock::getPositionFlock() {
+const std::vector<sf::Vector2f> fl::flock::getPositionFlock() {
   std::vector<sf::Vector2f> posBoids;
   for (auto b : flock_) {
     posBoids.push_back(b.boid.getPosition());
   }
   return posBoids;
 }
-void flock::collision() {
+void fl::flock::collision() {
 
   for (auto &b : flock_) {
     if (b.boid.getPosition().x > 1000.f) {
@@ -86,13 +86,15 @@ void flock::collision() {
     }
   }
 }
-std::vector<sf::Vector2f> flock::getVelocityFlock() { return velocityFLock_; }
+std::vector<sf::Vector2f> fl::flock::getVelocityFlock() {
+  return velocityFLock_;
+}
 
-void flock::moveFlock(const float d_s, const float d, const float s,
-                      const float a, const float c,
-                      std::vector<sf::Vector2f> &posBoids,
-                      std::vector<sf::Vector2f> &vBoids,
-                      std::array<sf::Vector2f, 4> &posObstacle) {
+void fl::flock::moveFlock(const float d_s, const float d, const float s,
+                          const float a, const float c,
+                          std::vector<sf::Vector2f> &posBoids,
+                          std::vector<sf::Vector2f> &vBoids,
+                          std::array<sf::Vector2f, 4> &posObstacle) {
   for (size_t i = 0; i < flock_.size(); i++) {
     sf::Vector2f v =
         veloxBoid(i, d_s, d, s, a, c, posBoids, vBoids, posObstacle);
@@ -106,19 +108,19 @@ void flock::moveFlock(const float d_s, const float d, const float s,
   }
 }
 
-void characterizationObs(obstacle &O) {
+void obs::characterizationObs(obs::obstacle &O) {
   O.circle_.setRadius(10.f);
   O.circle_.setOrigin(10.f, 10.f);
   O.circle_.setPosition(O.position_);
   O.circle_.setFillColor(sf::Color(0, 0, 0));
 }
 
-void drawObs(sf::RenderWindow &window, obstacle &O) {
+void obs::draw_Obs(sf::RenderWindow &window, obs::obstacle &O) {
   characterizationObs(O);
   window.draw(O.circle_);
 }
 
-void characterizationBoid(boid &u) {
+void Bd::characterizationBoid(Bd::boid &u) {
   u.boid.setPointCount(3);
   u.boid.setPoint(0, {0.f, 0.f});
   u.boid.setPoint(1, {45.f, 20.f});

@@ -98,7 +98,7 @@ int main() {
   const sf::Vector2f P3{325.f, 490.f};
   const sf::Vector2f P4{830.f, 170.f};
 
-  obstacle O1, O2, O3, O4;
+  obs::obstacle O1, O2, O3, O4;
 
   O1.position_ = P1;
   O2.position_ = P2;
@@ -106,8 +106,8 @@ int main() {
   O4.position_ = P4;
   std::array<sf::Vector2f, 4> posObstacle = {P1, P2, P3, P4};
 
-  flock flo(numBoids);
-  flo.setFlockSize(numBoids);
+  fl::flock flo(numBoids);
+  flo.set_FlockSize(numBoids);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -133,7 +133,7 @@ int main() {
                                      terminalText6);
     }
     if (numBoids != flo.size()) {
-      flo.setFlockSize(numBoids);
+      flo.set_FlockSize(numBoids);
     }
     std::vector<sf::Vector2f> posFlock = flo.getPositionFlock();
     std::vector<sf::Vector2f> velocityVecFlock = flo.getVelocityFlock();
@@ -154,11 +154,11 @@ int main() {
     draw(window, cRect, paramText6, paramNumText6);
     draw(window, distanceRect, outputText1, outputNumText1);
     draw(window, velocityRect, outputText2, outputNumText2);
-    drawObs(window, O1);
-    drawObs(window, O2);
-    drawObs(window, O3);
-    drawObs(window, O4);
-    flo.drawFlock(window);
+    draw_Obs(window, O1);
+    draw_Obs(window, O2);
+    draw_Obs(window, O3);
+    draw_Obs(window, O4);
+    flo.draw_Flock(window);
     window.display();
   }
   return 0;

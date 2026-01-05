@@ -150,22 +150,22 @@ TEST_CASE("Testing velocity functions") {
 }
 TEST_CASE("flock") {
   SUBCASE("constructor") {
-    flock f(10);
+    fl::flock f(10);
     CHECK(f.getPositionFlock().size() == 10);
   }
   SUBCASE("setFlockSize") {
-    flock f(5);
-    f.setFlockSize(15);
+    fl::flock f(5);
+    f.set_FlockSize(15);
     CHECK(f.size() == 15);
-    f.setFlockSize(7);
+    f.set_FlockSize(7);
     CHECK(f.size() == 7);
   }
   SUBCASE("getPositionFlock") {
-    flock f(12);
+    fl::flock f(12);
     CHECK(f.getPositionFlock().size() == 12);
   }
   SUBCASE("collision") {
-    flock f(1);
+    fl::flock f(1);
     auto pos = f.getPositionFlock();
     pos[0] = {1005.f, 610.f};
     f.collision();
@@ -174,7 +174,7 @@ TEST_CASE("flock") {
     CHECK(newPos[0].y < 600.f);
   }
   SUBCASE("moveFlock") {
-    flock f(3);
+    fl::flock f(3);
     auto pos = f.getPositionFlock();
     auto prev = pos;
     std::array<sf::Vector2f, 4> obs = {};
